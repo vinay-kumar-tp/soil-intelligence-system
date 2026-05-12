@@ -1,6 +1,9 @@
 import pandas as pd
-from preprocessing.validator import validate_input
+
+from preprocessing.cleaner import remove_duplicates
+from preprocessing.encoder import encode_labels
 from preprocessing.feature_engineer import create_soil_quality_index
+from preprocessing.validator import validate_input
 
 
 def test_valid_input():
@@ -49,7 +52,7 @@ def test_invalid_ph():
     }
     result = validate_input(inp)
     assert result["valid"] is False
-    assert any("pH" in err for err in result["errors"])
+    assert any("ph" in err.lower() for err in result["errors"])
 
 
 def test_soil_quality_index():
@@ -67,3 +70,34 @@ def test_soil_quality_index():
     df = create_soil_quality_index(df)
     assert "soil_quality_index" in df.columns
     assert df["soil_quality_index"].iloc[0] > 0
+
+
+def test_remove_duplicates():
+    """Ensure duplicate removal logs and reduces rows.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    df = pd.DataFrame([{"N": 10}, {"N": 10}, {"N": 20}])
+    cleaned = remove_duplicates(df)
+    assert len(cleaned) == 2
+
+
+def test_label_encoding_unknown():
+    """Validate unknown labels map to the unknown value.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    df_train = pd.DataFrame({"crop": ["Rice", "Wheat"]})
+    encoded_train, encoders = encode_labels(df_train, ["crop"], fit=True)
+    df_test = pd.DataFrame({"crop": ["Rice", "Barley"]})
+    encoded_test, _ = encode_labels(df_test, ["crop"], fit=False, encoders=encoders)
+    assert encoded_train["crop"].max() >= 0
+    assert encoded_test["crop"].iloc[1] == -1

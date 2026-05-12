@@ -31,8 +31,15 @@ DEFICIENCY_LABELS = [
 IRRIGATION_LABELS = ["Irrigation needed", "Optimal moisture", "Overwatered"]
 SEASON_LABELS = ["kharif", "rabi", "summer"]
 
+# Raw datasets
+RAW_DATASETS = {
+    "crop_recommendation": "crop_recommendation.csv",
+    "soil_fertility": "soil_fertility.csv",
+    "optional_india_soil_data": "optional_india_soil_data.csv",
+}
+
 # Feature columns
-FEATURE_COLS = [
+RAW_FEATURE_COLS = [
     "N",
     "P",
     "K",
@@ -45,16 +52,27 @@ FEATURE_COLS = [
     "rainfall",
     "latitude",
     "longitude",
+    "season",
+]
+
+ENGINEERED_FEATURE_COLS = [
     "soil_quality_index",
     "fertility_score",
+    "soil_health_score",
     "lat_lon_cluster",
     "region_code",
     "season_encoded",
 ]
 
+FEATURE_COLS = RAW_FEATURE_COLS + ENGINEERED_FEATURE_COLS
+
 TARGET_CROP = "crop"
 TARGET_FERTILITY = "fertility_grade"
 TARGET_DEFICIENCY = "nutrient_status"
+
+TARGET_COLS = [TARGET_CROP, TARGET_FERTILITY, TARGET_DEFICIENCY]
+COLUMN_RENAME_MAP = {}
+LABEL_NORMALIZATION_COLS = TARGET_COLS
 
 # Paths
 RAW_DATA_PATH = "datasets/raw/"
@@ -64,7 +82,32 @@ LOG_PATH = "logs/"
 REPORT_PATH = "reports/"
 SHAP_OUTPUT_PATH = "reports/shap_outputs/"
 
+PROCESSED_MERGED_FILENAME = "merged_soil_data.csv"
+RAW_DATA_REPORT_FILENAME = "raw_data_report.txt"
+PROCESSED_DATA_REPORT_FILENAME = "processed_data_summary.txt"
+PREPROCESSING_LOG_FILE = "preprocessing.log"
+LABEL_ENCODERS_FILENAME = "label_encoders.pkl"
+SCALER_FILENAME = "scaler.pkl"
+KMEANS_FILENAME = "kmeans_spatial.pkl"
+UNKNOWN_LABEL_VALUE = -1
+
 # Nutrient thresholds
+N_MIN = 0
+N_MAX = 200
+P_MIN = 0
+P_MAX = 200
+K_MIN = 0
+K_MAX = 200
+PH_MIN_ALLOWED = 0.0
+PH_MAX_ALLOWED = 14.0
+MOISTURE_MIN = 0.0
+MOISTURE_MAX = 100.0
+HUMIDITY_MIN = 0.0
+HUMIDITY_MAX = 100.0
+RAINFALL_MIN = 0.0
+RAINFALL_MAX = 5000.0
+TEMPERATURE_MIN = -10.0
+TEMPERATURE_MAX = 60.0
 N_LOW = 20
 N_HIGH = 80
 P_LOW = 10
