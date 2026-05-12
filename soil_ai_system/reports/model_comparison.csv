@@ -1,0 +1,7 @@
+model,crop_acc,fertility_acc,deficiency_acc,train_time_s,inference_time_s,notes
+Logistic Regression,,,,,,
+Random Forest,,,,,,
+SVM,,,,,,
+XGBoost,,,,,,
+DNN Multi-task,,,,,,
+Stacked Ensemble,,,,,,
