@@ -1,0 +1,25 @@
+Config Validation Report
+========================
+
+Raw files present: ['Crop_recommendation.csv', 'soil_fertility.csv', 'southern_india_soil.csv']
+Config RAW_DATASETS: ['crop_recommendation.csv', 'optional_india_soil_data.csv', 'soil_fertility.csv']
+Present but not in config: ['Crop_recommendation.csv', 'southern_india_soil.csv']
+Config expects missing files: ['crop_recommendation.csv', 'optional_india_soil_data.csv']
+
+Dataset: Crop_recommendation.csv
+  Columns: ['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall', 'label']
+  Missing RAW_FEATURE_COLS: ['ec', 'latitude', 'longitude', 'moisture', 'organic_carbon', 'season']
+  Extra columns (not in RAW_FEATURE_COLS or TARGET_COLS): ['label']
+
+Dataset: soil_fertility.csv
+  Columns: ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Zn', 'Fe', 'Cu', 'Mn', 'B', 'Output']
+  Missing RAW_FEATURE_COLS: ['ec', 'humidity', 'latitude', 'longitude', 'moisture', 'organic_carbon', 'ph', 'rainfall', 'season', 'temperature']
+  Extra columns (not in RAW_FEATURE_COLS or TARGET_COLS): ['B', 'Cu', 'EC', 'Fe', 'Mn', 'OC', 'Output', 'S', 'Zn', 'pH']
+  Possible rename: EC -> ec
+  Possible rename: pH -> ph
+
+Dataset: southern_india_soil.csv
+  Columns: ['District', 'Nitrogen Value', 'Phosphorous value', 'Potassium value', 'pH']
+  Missing RAW_FEATURE_COLS: ['K', 'N', 'P', 'ec', 'humidity', 'latitude', 'longitude', 'moisture', 'organic_carbon', 'ph', 'rainfall', 'season', 'temperature']
+  Extra columns (not in RAW_FEATURE_COLS or TARGET_COLS): ['District', 'Nitrogen Value', 'Phosphorous value', 'Potassium value', 'pH']
+  Possible rename: pH -> ph

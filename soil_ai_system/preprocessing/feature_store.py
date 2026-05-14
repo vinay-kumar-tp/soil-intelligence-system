@@ -11,6 +11,7 @@ from config import (
     KMEANS_FILENAME,
     LABEL_ENCODERS_FILENAME,
     MODEL_VERSION,
+    PIPELINE_ARTIFACTS,
     PREPROCESSING_LOG_FILE,
     SAVED_MODELS_PATH,
     SCALER_FILENAME,
@@ -27,10 +28,33 @@ ARTIFACTS = [SCALER_FILENAME, LABEL_ENCODERS_FILENAME, KMEANS_FILENAME]
 def _get_version_path(version: Optional[str]) -> Path:
     """Build a versioned path for saved artifacts."""
     version_name = version or MODEL_VERSION
-    return (Path(SAVED_MODELS_PATH) / version_name).resolve()
+    base_path = Path(SAVED_MODELS_PATH)
+    if base_path.name == version_name:
+        return base_path.resolve()
+    return (base_path / version_name).resolve()
 
 
-def save_pipeline(scaler, encoders, kmeans, version: Optional[str] = None) -> None:
+def _resolve_artifact_dir(
+    artifact_dir: Optional[str],
+    dataset_key: Optional[str],
+    version: Optional[str],
+) -> Path:
+    """Resolve the artifact directory for a dataset pipeline or versioned path."""
+    if artifact_dir:
+        return Path(artifact_dir).resolve()
+    if dataset_key and dataset_key in PIPELINE_ARTIFACTS:
+        return Path(PIPELINE_ARTIFACTS[dataset_key]).resolve()
+    return _get_version_path(version)
+
+
+def save_pipeline(
+    scaler,
+    encoders,
+    kmeans,
+    version: Optional[str] = None,
+    artifact_dir: Optional[str] = None,
+    dataset_key: Optional[str] = None,
+) -> None:
     """Persist preprocessing artifacts for a model version.
 
     Args:
@@ -45,7 +69,7 @@ def save_pipeline(scaler, encoders, kmeans, version: Optional[str] = None) -> No
     Side Effects:
         - Writes artifacts to the saved_models directory.
     """
-    path = _get_version_path(version)
+    path = _resolve_artifact_dir(artifact_dir, dataset_key, version)
     path.mkdir(parents=True, exist_ok=True)
     joblib.dump(scaler, path / SCALER_FILENAME)
     joblib.dump(encoders, path / LABEL_ENCODERS_FILENAME)
@@ -53,7 +77,11 @@ def save_pipeline(scaler, encoders, kmeans, version: Optional[str] = None) -> No
     LOGGER.info("Pipeline saved to %s", path)
 
 
-def load_pipeline(version: Optional[str] = None) -> Dict[str, object]:
+def load_pipeline(
+    version: Optional[str] = None,
+    artifact_dir: Optional[str] = None,
+    dataset_key: Optional[str] = None,
+) -> Dict[str, object]:
     """Load preprocessing artifacts for a model version.
 
     Args:
@@ -62,7 +90,7 @@ def load_pipeline(version: Optional[str] = None) -> Dict[str, object]:
     Returns:
         dict: Loaded scaler, encoders, and KMeans artifacts.
     """
-    path = _get_version_path(version)
+    path = _resolve_artifact_dir(artifact_dir, dataset_key, version)
     payload = {
         "scaler": joblib.load(path / SCALER_FILENAME),
         "encoders": joblib.load(path / LABEL_ENCODERS_FILENAME),

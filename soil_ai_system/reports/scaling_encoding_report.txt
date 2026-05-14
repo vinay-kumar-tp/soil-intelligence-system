@@ -1,0 +1,23 @@
+Encoding & Scaling Report
+=========================
+
+Dataset: Crop_recommendation.csv
+  Shape: (2200, 8)
+  Encoded target columns: none (no target columns matched config)
+  Train scale range: 0.000 to 1.000
+  Val scale range: -0.001 to 1.000
+  Test scale range: -0.000 to 1.000
+
+Dataset: soil_fertility.csv
+  Shape: (880, 13)
+  Encoded target columns: none (no target columns matched config)
+  Train scale range: 0.000 to 1.000
+  Val scale range: -0.029 to 1.296
+  Test scale range: -0.153 to 1.120
+
+Dataset: southern_india_soil.csv
+  Shape: (875, 5)
+  Encoded target columns: none (no target columns matched config)
+  Train scale range: 0.000 to 1.000
+  Val scale range: -0.009 to 1.074
+  Test scale range: 0.000 to 1.008

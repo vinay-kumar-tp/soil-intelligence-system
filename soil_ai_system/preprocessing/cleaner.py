@@ -37,7 +37,10 @@ def handle_missing_values(
     Returns:
         tuple[pandas.DataFrame, KNNImputer]: Imputed dataset and imputer.
     """
-    numeric_cols = list(numeric_cols or df.select_dtypes(include=np.number).columns)
+    if numeric_cols is None:
+        numeric_cols = list(df.select_dtypes(include=np.number).columns)
+    else:
+        numeric_cols = list(numeric_cols)
     if not numeric_cols:
         LOGGER.warning("No numeric columns found for imputation")
         return df, imputer or KNNImputer(n_neighbors=n_neighbors)
@@ -161,6 +164,173 @@ def remove_outliers_zscore(
         df = df[z_scores < threshold]
 
     df = df.reset_index(drop=True)
+    return _enforce_removal_limit(original, df, max_fraction_removed, allow_excessive, raise_on_excessive)
+
+
+def compute_iqr_bounds(
+    df: pd.DataFrame,
+    cols: Iterable[str],
+    iqr_multiplier: float = 1.5,
+) -> dict:
+    """Compute IQR bounds for columns based on training data.
+
+    Args:
+        df (pandas.DataFrame): Training dataset.
+        cols (Iterable[str]): Columns to compute bounds for.
+        iqr_multiplier (float): IQR multiplier for bounds.
+
+    Returns:
+        dict: Mapping of column name to (lower, upper) bounds.
+    """
+    bounds = {}
+    for col in cols:
+        if col not in df.columns:
+            LOGGER.warning("IQR bounds column missing: %s", col)
+            continue
+        q1 = df[col].quantile(0.25)
+        q3 = df[col].quantile(0.75)
+        iqr = q3 - q1
+        bounds[col] = (q1 - iqr_multiplier * iqr, q3 + iqr_multiplier * iqr)
+    LOGGER.info("Computed IQR bounds for %s columns", len(bounds))
+    return bounds
+
+
+def clip_to_bounds(df: pd.DataFrame, bounds: dict) -> Tuple[pd.DataFrame, dict]:
+    """Clip values to precomputed bounds and report clipping counts.
+
+    Args:
+        df (pandas.DataFrame): Dataset to clip.
+        bounds (dict): Mapping of column name to (lower, upper) bounds.
+
+    Returns:
+        tuple[pandas.DataFrame, dict]: Clipped dataset and per-column clip report.
+    """
+    report: dict = {}
+    df = df.copy()
+
+    for col, (lower, upper) in bounds.items():
+        if col not in df.columns:
+            LOGGER.warning("Clip bound column missing: %s", col)
+            continue
+        values = df[col].astype(float)
+        clipped = values.clip(lower, upper)
+        lower_hits = int((values < lower).sum())
+        upper_hits = int((values > upper).sum())
+        df[col] = clipped
+        report[col] = {
+            "lower": float(lower),
+            "upper": float(upper),
+            "clipped_low": lower_hits,
+            "clipped_high": upper_hits,
+            "total_clipped": lower_hits + upper_hits,
+        }
+
+    return df, report
+
+
+def clip_outliers_iqr(
+    df: pd.DataFrame,
+    cols: Iterable[str],
+    iqr_multiplier: float = 1.5,
+) -> Tuple[pd.DataFrame, dict, dict]:
+    """Clip outliers using IQR bounds instead of removing rows.
+
+    Args:
+        df (pandas.DataFrame): Input dataset.
+        cols (Iterable[str]): Columns to clip.
+        iqr_multiplier (float): IQR multiplier for bounds.
+
+    Returns:
+        tuple[pandas.DataFrame, dict, dict]: Clipped dataset, clip report, and bounds.
+    """
+    bounds = compute_iqr_bounds(df, cols, iqr_multiplier=iqr_multiplier)
+    clipped_df, report = clip_to_bounds(df, bounds)
+    return clipped_df, report, bounds
+
+
+def apply_iqr_bounds(
+    df: pd.DataFrame,
+    bounds: dict,
+    max_fraction_removed: float = 0.2,
+    allow_excessive: bool = False,
+    raise_on_excessive: bool = False,
+) -> pd.DataFrame:
+    """Apply precomputed IQR bounds to filter outliers.
+
+    Args:
+        df (pandas.DataFrame): Dataset to filter.
+        bounds (dict): Mapping of column name to (lower, upper) bounds.
+        max_fraction_removed (float): Max fraction of rows that can be removed.
+        allow_excessive (bool): Keep removals even if above threshold.
+        raise_on_excessive (bool): Raise ValueError if removal exceeds threshold.
+
+    Returns:
+        pandas.DataFrame: Filtered dataset.
+    """
+    original = df
+    for col, (lower, upper) in bounds.items():
+        if col not in df.columns:
+            LOGGER.warning("IQR bound column missing: %s", col)
+            continue
+        df = df[(df[col] >= lower) & (df[col] <= upper)]
+
+    df = df.reset_index(drop=True)
+    return _enforce_removal_limit(original, df, max_fraction_removed, allow_excessive, raise_on_excessive)
+
+
+def compute_zscore_stats(df: pd.DataFrame, cols: Iterable[str]) -> dict:
+    """Compute mean and std for z-score filtering from training data.
+
+    Args:
+        df (pandas.DataFrame): Training dataset.
+        cols (Iterable[str]): Columns to compute stats for.
+
+    Returns:
+        dict: Mapping of column name to (mean, std).
+    """
+    stats_map = {}
+    for col in cols:
+        if col not in df.columns:
+            LOGGER.warning("Z-score stats column missing: %s", col)
+            continue
+        stats_map[col] = (float(df[col].mean()), float(df[col].std(ddof=0)))
+    LOGGER.info("Computed z-score stats for %s columns", len(stats_map))
+    return stats_map
+
+
+def apply_zscore_stats(
+    df: pd.DataFrame,
+    stats_map: dict,
+    threshold: float = 3.0,
+    max_fraction_removed: float = 0.2,
+    allow_excessive: bool = False,
+    raise_on_excessive: bool = False,
+) -> pd.DataFrame:
+    """Apply precomputed z-score stats to filter outliers.
+
+    Args:
+        df (pandas.DataFrame): Dataset to filter.
+        stats_map (dict): Mapping of column name to (mean, std).
+        threshold (float): Z-score cutoff for filtering.
+        max_fraction_removed (float): Max fraction of rows that can be removed.
+        allow_excessive (bool): Keep removals even if above threshold.
+        raise_on_excessive (bool): Raise ValueError if removal exceeds threshold.
+
+    Returns:
+        pandas.DataFrame: Filtered dataset.
+    """
+    original = df
+    mask = pd.Series(True, index=df.index)
+    for col, (mean, std) in stats_map.items():
+        if col not in df.columns:
+            LOGGER.warning("Z-score stats column missing: %s", col)
+            continue
+        if std == 0:
+            continue
+        z_scores = (df[col].astype(float) - mean) / std
+        mask &= z_scores.abs() < threshold
+
+    df = df[mask].reset_index(drop=True)
     return _enforce_removal_limit(original, df, max_fraction_removed, allow_excessive, raise_on_excessive)
 
 

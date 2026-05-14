@@ -1,0 +1,32 @@
+Feature Engineering Report
+==========================
+
+Dataset: Crop_recommendation.csv
+  Shape: (2200, 8)
+  soil_quality_index skipped; missing columns: ['organic_carbon']
+  fertility_score generated
+  soil_health_score skipped; missing columns: ['moisture', 'organic_carbon']
+  lat_lon_cluster defaulted (missing spatial columns)
+  season_encoded defaulted (missing season)
+  region_code derived from lat_lon_cluster
+  Engineered feature NaNs: 0
+
+Dataset: soil_fertility.csv
+  Shape: (880, 13)
+  soil_quality_index skipped; missing columns: ['organic_carbon', 'ph']
+  fertility_score generated
+  soil_health_score skipped; missing columns: ['moisture', 'organic_carbon', 'ph']
+  lat_lon_cluster defaulted (missing spatial columns)
+  season_encoded defaulted (missing season)
+  region_code derived from lat_lon_cluster
+  Engineered feature NaNs: 0
+
+Dataset: southern_india_soil.csv
+  Shape: (875, 5)
+  soil_quality_index skipped; missing columns: ['K', 'N', 'P', 'organic_carbon', 'ph']
+  fertility_score skipped; missing N/P/K
+  soil_health_score skipped; missing columns: ['K', 'N', 'P', 'moisture', 'organic_carbon', 'ph']
+  lat_lon_cluster defaulted (missing spatial columns)
+  season_encoded defaulted (missing season)
+  region_code derived from lat_lon_cluster
+  Engineered feature NaNs: 0

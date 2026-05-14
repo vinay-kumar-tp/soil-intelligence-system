@@ -1,0 +1,29 @@
+Cleaning Pipeline Report
+========================
+
+Dataset: Crop_recommendation.csv
+  Original shape: (2200, 8)
+  Original nulls: 0
+  Original duplicates: 0
+  After dedupe shape: (2200, 8)
+  After imputation nulls: 0
+  After IQR outlier removal shape: (1846, 8)
+  Outlier rows removed: 354
+
+Dataset: soil_fertility.csv
+  Original shape: (880, 13)
+  Original nulls: 0
+  Original duplicates: 0
+  After dedupe shape: (880, 13)
+  After imputation nulls: 0
+  After IQR outlier removal shape: (880, 13)
+  Outlier rows removed: 0
+
+Dataset: southern_india_soil.csv
+  Original shape: (875, 5)
+  Original nulls: 0
+  Original duplicates: 0
+  After dedupe shape: (875, 5)
+  After imputation nulls: 0
+  After IQR outlier removal shape: (875, 5)
+  Outlier rows removed: 0

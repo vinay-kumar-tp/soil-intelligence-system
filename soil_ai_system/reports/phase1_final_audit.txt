@@ -1,0 +1,26 @@
+Phase 1 Final Audit
+===================
+
+Reports generated:
+  - raw_data_report: True (C:\Users\vinay\PROJECTS\soil-intelligence-system\soil_ai_system\reports\raw_data_report.txt)
+  - config_validation_report: True (C:\Users\vinay\PROJECTS\soil-intelligence-system\soil_ai_system\reports\config_validation_report.txt)
+  - validation_report: True (C:\Users\vinay\PROJECTS\soil-intelligence-system\soil_ai_system\reports\validation_report.txt)
+  - cleaning_report: True (C:\Users\vinay\PROJECTS\soil-intelligence-system\soil_ai_system\reports\cleaning_report.txt)
+  - feature_engineering_report: True (C:\Users\vinay\PROJECTS\soil-intelligence-system\soil_ai_system\reports\feature_engineering_report.txt)
+  - scaling_encoding_report: True (C:\Users\vinay\PROJECTS\soil-intelligence-system\soil_ai_system\reports\scaling_encoding_report.txt)
+
+Processed dataset exists: False (C:\Users\vinay\PROJECTS\soil-intelligence-system\soil_ai_system\datasets\processed\merged_soil_data.csv)
+
+Key findings:
+  - Raw dataset set does not match config RAW_DATASETS (see config_validation_report).
+  - Required columns missing across multiple datasets; validation flagged CRITICAL issues.
+  - N/K ranges exceed config thresholds in soil_fertility.csv (possible unit mismatch).
+  - Feature engineering skipped for missing columns on multiple datasets.
+  - Encoding targets not applied because target columns do not match config.
+
+Leakage verification:
+  - Scaling audit used train/val/test split before fitting scaler.
+  - Full preprocessing pipeline not executed due to schema mismatches; no leakage in outputs.
+
+Readiness status for Phase 2: NOT READY
+Reason: Schema mismatches must be resolved and full pipeline execution completed.

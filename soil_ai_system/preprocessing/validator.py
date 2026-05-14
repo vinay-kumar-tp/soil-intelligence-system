@@ -23,10 +23,10 @@ from config import (
     P_MIN,
     PH_MAX_ALLOWED,
     PH_MIN_ALLOWED,
+    PIPELINE_CONFIGS,
+    PREPROCESSING_LOG_FILE,
     RAINFALL_MAX,
     RAINFALL_MIN,
-    RAW_FEATURE_COLS,
-    PREPROCESSING_LOG_FILE,
     SEASON_LABELS,
     TEMPERATURE_MAX,
     TEMPERATURE_MIN,
@@ -67,6 +67,30 @@ class SoilRecord(BaseModel):
     fertility_grade: Optional[str] = None
     nutrient_status: Optional[str] = None
 
+    @field_validator(
+        "N",
+        "P",
+        "K",
+        "ph",
+        "ec",
+        "organic_carbon",
+        "moisture",
+        "temperature",
+        "humidity",
+        "rainfall",
+        "latitude",
+        "longitude",
+        mode="before",
+    )
+    @classmethod
+    def _nan_to_none(cls, value: Any) -> Any:
+        """Convert NaN values into None before applying range checks."""
+        if value is None:
+            return value
+        if isinstance(value, float) and pd.isna(value):
+            return None
+        return value
+
     @field_validator("season")
     @classmethod
     def validate_season(cls, value: Optional[str]) -> Optional[str]:
@@ -103,6 +127,7 @@ def validate_input(row: Dict[str, Any]) -> Dict[str, Any]:
 
 def validate_dataframe(
     df: pd.DataFrame,
+    dataset_key: Optional[str] = None,
     required_columns: Optional[List[str]] = None,
     strict: bool = False,
     max_error_rows: int = 50,
@@ -111,6 +136,7 @@ def validate_dataframe(
 
     Args:
         df (pandas.DataFrame): Dataset to validate.
+        dataset_key (str | None): Dataset pipeline key for config-driven checks.
         required_columns (list[str] | None): Columns expected in the dataset.
         strict (bool): Raise ValueError when validation fails.
         max_error_rows (int): Maximum number of row-level errors to store.
@@ -121,37 +147,107 @@ def validate_dataframe(
     Raises:
         ValueError: If strict is True and validation failures are detected.
     """
-    required_columns = required_columns or RAW_FEATURE_COLS
+    config_required: List[str] = []
+    if dataset_key:
+        config = PIPELINE_CONFIGS.get(dataset_key)
+        if config:
+            config_required = list(config.get("features", []))
+            target = config.get("target")
+            if target:
+                config_required.append(target)
+    required_columns = required_columns or config_required
     missing_columns = [col for col in required_columns if col not in df.columns]
 
-    validation_errors: List[Dict[str, Any]] = []
-    invalid_rows = 0
-    for idx, row in df.iterrows():
-        result = validate_input(row.to_dict())
-        if not result["valid"]:
-            invalid_rows += 1
-            if len(validation_errors) < max_error_rows:
-                validation_errors.append({"row_index": int(idx), "errors": result["errors"]})
+    hard_checks = {
+        "ph": (PH_MIN_ALLOWED, PH_MAX_ALLOWED),
+        "moisture": (MOISTURE_MIN, MOISTURE_MAX),
+        "temperature": (TEMPERATURE_MIN, TEMPERATURE_MAX),
+        "humidity": (HUMIDITY_MIN, HUMIDITY_MAX),
+        "rainfall": (RAINFALL_MIN, RAINFALL_MAX),
+    }
+    soft_checks = {
+        "N": (N_MIN, N_MAX),
+        "P": (P_MIN, P_MAX),
+        "K": (K_MIN, K_MAX),
+    }
+
+    hard_violations, hard_row_errors = _collect_range_violations(
+        df, hard_checks, max_error_rows
+    )
+    soft_violations, _ = _collect_range_violations(
+        df, soft_checks, max_error_rows
+    )
+
+    validation_errors: List[Dict[str, Any]] = [
+        {"row_index": idx, "errors": errors}
+        for idx, errors in hard_row_errors.items()
+    ]
+    invalid_rows = len(hard_row_errors)
+
+    severity = "PASS"
+    if missing_columns or hard_violations:
+        severity = "CRITICAL"
+    elif soft_violations:
+        severity = "WARN"
 
     report = {
         "shape": df.shape,
         "nulls": df.isnull().sum().to_dict(),
         "duplicates": int(df.duplicated().sum()),
         "missing_columns": missing_columns,
+        "hard_violations": hard_violations,
+        "soft_violations": soft_violations,
         "invalid_rows": invalid_rows,
         "validation_errors": validation_errors,
+        "severity": severity,
     }
 
     LOGGER.info("Validation report generated: %s", report["shape"])
     if missing_columns:
         LOGGER.warning("Missing required columns: %s", missing_columns)
     if invalid_rows:
-        LOGGER.warning("Found %s invalid rows", invalid_rows)
+        LOGGER.warning("Found %s rows with hard violations", invalid_rows)
+    if soft_violations:
+        LOGGER.warning("Soft range warnings detected: %s", list(soft_violations.keys()))
 
-    if strict and (missing_columns or invalid_rows > 0):
+    if strict and severity == "CRITICAL":
         raise ValueError("Validation failed. See report for details.")
 
     return report
+
+
+def _collect_range_violations(
+    df: pd.DataFrame,
+    checks: Dict[str, tuple],
+    max_error_rows: int,
+) -> tuple:
+    """Collect range violations and sample row errors for configured checks."""
+    violations: Dict[str, Dict[str, Any]] = {}
+    row_errors: Dict[int, List[str]] = {}
+
+    for col, (lower, upper) in checks.items():
+        if col not in df.columns:
+            continue
+        mask = pd.Series(False, index=df.index)
+        if lower is not None:
+            mask |= df[col] < lower
+        if upper is not None:
+            mask |= df[col] > upper
+        if not mask.any():
+            continue
+        violations[col] = {
+            "count": int(mask.sum()),
+            "min": float(df[col].min()),
+            "max": float(df[col].max()),
+            "lower": lower,
+            "upper": upper,
+        }
+        for idx in df.index[mask][:max_error_rows]:
+            row_errors.setdefault(int(idx), []).append(
+                f"{col}: out of range [{lower}, {upper}]"
+            )
+
+    return violations, row_errors
 
 
 def _resolve_path(relative_path: str) -> Path:

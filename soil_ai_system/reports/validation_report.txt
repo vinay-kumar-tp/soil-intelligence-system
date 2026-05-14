@@ -1,0 +1,32 @@
+Validation Report
+=================
+
+Dataset: Crop_recommendation.csv
+  Shape: (2200, 8)
+  Missing required columns: ['ec', 'organic_carbon', 'moisture', 'latitude', 'longitude', 'season']
+  Severity: CRITICAL (missing required columns)
+  HIGH: K out-of-range rows: 94 (expected 0-200)
+  Validator invalid rows: 94
+    Row 1201: ['K: Input should be less than or equal to 200']
+    Row 1202: ['K: Input should be less than or equal to 200']
+    Row 1208: ['K: Input should be less than or equal to 200']
+    Row 1209: ['K: Input should be less than or equal to 200']
+    Row 1211: ['K: Input should be less than or equal to 200']
+
+Dataset: soil_fertility.csv
+  Shape: (880, 13)
+  Missing required columns: ['ph', 'ec', 'organic_carbon', 'moisture', 'temperature', 'humidity', 'rainfall', 'latitude', 'longitude', 'season']
+  Severity: CRITICAL (missing required columns)
+  HIGH: N out-of-range rows: 682 (expected 0-200)
+  HIGH: K out-of-range rows: 878 (expected 0-200)
+  Validator invalid rows: 880
+    Row 0: ['K: Input should be less than or equal to 200']
+    Row 1: ['N: Input should be less than or equal to 200', 'K: Input should be less than or equal to 200']
+    Row 2: ['K: Input should be less than or equal to 200']
+    Row 3: ['K: Input should be less than or equal to 200']
+    Row 4: ['N: Input should be less than or equal to 200', 'K: Input should be less than or equal to 200']
+
+Dataset: southern_india_soil.csv
+  Shape: (875, 5)
+  Missing required columns: ['N', 'P', 'K', 'ph', 'ec', 'organic_carbon', 'moisture', 'temperature', 'humidity', 'rainfall', 'latitude', 'longitude', 'season']
+  Severity: CRITICAL (missing required columns)

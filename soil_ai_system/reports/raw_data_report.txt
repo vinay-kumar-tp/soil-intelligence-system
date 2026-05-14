@@ -1,0 +1,101 @@
+Raw Data Inspection Report
+==========================
+
+Dataset: Crop_recommendation.csv
+Shape: (2200, 8)
+Columns: N, P, K, temperature, humidity, ph, rainfall, label
+Dtypes:
+  - N: int64
+  - P: int64
+  - K: int64
+  - temperature: float64
+  - humidity: float64
+  - ph: float64
+  - rainfall: float64
+  - label: str
+Null Counts:
+  - N: 0
+  - P: 0
+  - K: 0
+  - temperature: 0
+  - humidity: 0
+  - ph: 0
+  - rainfall: 0
+  - label: 0
+Duplicate Rows: 0
+Sample Rows:
+  - {'N': 90, 'P': 42, 'K': 43, 'temperature': 20.87974371, 'humidity': 82.00274423, 'ph': 6.502985292000001, 'rainfall': 202.9355362, 'label': 'rice'}
+  - {'N': 85, 'P': 58, 'K': 41, 'temperature': 21.77046169, 'humidity': 80.31964408, 'ph': 7.038096361, 'rainfall': 226.6555374, 'label': 'rice'}
+  - {'N': 60, 'P': 55, 'K': 44, 'temperature': 23.00445915, 'humidity': 82.3207629, 'ph': 7.840207144, 'rainfall': 263.9642476, 'label': 'rice'}
+  - {'N': 74, 'P': 35, 'K': 40, 'temperature': 26.49109635, 'humidity': 80.15836264, 'ph': 6.980400905, 'rainfall': 242.8640342, 'label': 'rice'}
+  - {'N': 78, 'P': 42, 'K': 42, 'temperature': 20.13017482, 'humidity': 81.60487287, 'ph': 7.628472891, 'rainfall': 262.7173405, 'label': 'rice'}
+
+Dataset: soil_fertility.csv
+Shape: (880, 13)
+Columns: N, P, K, pH, EC, OC, S, Zn, Fe, Cu, Mn, B, Output
+Dtypes:
+  - N: int64
+  - P: float64
+  - K: int64
+  - pH: float64
+  - EC: float64
+  - OC: float64
+  - S: float64
+  - Zn: float64
+  - Fe: float64
+  - Cu: float64
+  - Mn: float64
+  - B: float64
+  - Output: int64
+Null Counts:
+  - N: 0
+  - P: 0
+  - K: 0
+  - pH: 0
+  - EC: 0
+  - OC: 0
+  - S: 0
+  - Zn: 0
+  - Fe: 0
+  - Cu: 0
+  - Mn: 0
+  - B: 0
+  - Output: 0
+Duplicate Rows: 0
+Sample Rows:
+  - {'N': 138, 'P': 8.6, 'K': 560, 'pH': 7.46, 'EC': 0.62, 'OC': 0.7, 'S': 5.9, 'Zn': 0.24, 'Fe': 0.31, 'Cu': 0.77, 'Mn': 8.71, 'B': 0.11, 'Output': 0}
+  - {'N': 213, 'P': 7.5, 'K': 338, 'pH': 7.62, 'EC': 0.75, 'OC': 1.06, 'S': 25.4, 'Zn': 0.3, 'Fe': 0.86, 'Cu': 1.54, 'Mn': 2.89, 'B': 2.29, 'Output': 0}
+  - {'N': 163, 'P': 9.6, 'K': 718, 'pH': 7.59, 'EC': 0.51, 'OC': 1.11, 'S': 14.3, 'Zn': 0.3, 'Fe': 0.86, 'Cu': 1.57, 'Mn': 2.7, 'B': 2.03, 'Output': 0}
+  - {'N': 157, 'P': 6.8, 'K': 475, 'pH': 7.64, 'EC': 0.58, 'OC': 0.94, 'S': 26.0, 'Zn': 0.34, 'Fe': 0.54, 'Cu': 1.53, 'Mn': 2.65, 'B': 1.82, 'Output': 0}
+  - {'N': 270, 'P': 9.9, 'K': 444, 'pH': 7.63, 'EC': 0.4, 'OC': 0.86, 'S': 11.8, 'Zn': 0.25, 'Fe': 0.76, 'Cu': 1.69, 'Mn': 2.43, 'B': 2.26, 'Output': 1}
+
+Dataset: southern_india_soil.csv
+Shape: (875, 5)
+Columns: District, Nitrogen Value, Phosphorous value, Potassium value, pH
+Dtypes:
+  - District: str
+  - Nitrogen Value: float64
+  - Phosphorous value: float64
+  - Potassium value: float64
+  - pH: float64
+Null Counts:
+  - District: 0
+  - Nitrogen Value: 0
+  - Phosphorous value: 0
+  - Potassium value: 0
+  - pH: 0
+Duplicate Rows: 0
+Sample Rows:
+  - {'District': 'Yadgir', 'Nitrogen Value': 28.736, 'Phosphorous value': 67.103, 'Potassium value': 78.602, 'pH': 7.0954}
+  - {'District': 'Yadgir', 'Nitrogen Value': 22.229, 'Phosphorous value': 62.822, 'Potassium value': 75.221, 'pH': 7.3273}
+  - {'District': 'Yadgir', 'Nitrogen Value': 22.145, 'Phosphorous value': 70.373, 'Potassium value': 77.868, 'pH': 7.0311}
+  - {'District': 'Yadgir', 'Nitrogen Value': 26.321, 'Phosphorous value': 72.488, 'Potassium value': 76.697, 'pH': 7.047}
+  - {'District': 'Yadgir', 'Nitrogen Value': 26.687, 'Phosphorous value': 72.183, 'Potassium value': 75.068, 'pH': 7.0078}
+
+Schema Differences:
+- Crop_recommendation.csv missing 14 columns: ['B', 'Cu', 'District', 'EC', 'Fe', 'Mn', 'Nitrogen Value', 'OC', 'Output', 'Phosphorous value', 'Potassium value', 'S', 'Zn', 'pH']
+- soil_fertility.csv missing 9 columns: ['District', 'Nitrogen Value', 'Phosphorous value', 'Potassium value', 'humidity', 'label', 'ph', 'rainfall', 'temperature']
+- southern_india_soil.csv missing 17 columns: ['B', 'Cu', 'EC', 'Fe', 'K', 'Mn', 'N', 'OC', 'Output', 'P', 'S', 'Zn', 'humidity', 'label', 'ph', 'rainfall', 'temperature']
+
+Potential Column Name Mismatches:
+- ph: ['pH', 'ph']

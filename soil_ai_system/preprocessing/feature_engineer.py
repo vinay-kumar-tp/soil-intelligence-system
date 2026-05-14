@@ -2,21 +2,9 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Optional
-
-import numpy as np
 import pandas as pd
-import joblib
-from sklearn.cluster import KMeans
 
-from config import (
-    KMEANS_FILENAME,
-    PREPROCESSING_LOG_FILE,
-    SAVED_MODELS_PATH,
-    SEED,
-    SPATIAL_CLUSTERS,
-)
+from config import PREPROCESSING_LOG_FILE, PIPELINE_CONFIGS
 from utils.logger import get_logger
 
 
@@ -79,60 +67,6 @@ def create_soil_health_score(df):
     return df
 
 
-def create_spatial_clusters(df, fit=True, kmeans_path: Optional[str] = None):
-    """Create or apply KMeans clusters for latitude/longitude.
-
-    Args:
-        df (pandas.DataFrame): Input dataset.
-        fit (bool): Whether to fit a new KMeans model.
-        kmeans_path (str | None): Optional path for persisted model.
-
-    Returns:
-        pandas.DataFrame: Dataset with lat_lon_cluster added.
-
-    Side Effects:
-        - Writes or reads the KMeans model to/from disk.
-    """
-    if "latitude" in df.columns and "longitude" in df.columns:
-        if fit:
-            kmeans = KMeans(
-                n_clusters=SPATIAL_CLUSTERS, random_state=SEED, n_init=10
-            )
-            df["lat_lon_cluster"] = kmeans.fit_predict(df[["latitude", "longitude"]])
-            save_path = kmeans_path or str(Path(SAVED_MODELS_PATH) / KMEANS_FILENAME)
-            Path(save_path).parent.mkdir(parents=True, exist_ok=True)
-            joblib.dump(kmeans, save_path)
-            LOGGER.info("Spatial KMeans saved to %s", save_path)
-        else:
-            load_path = kmeans_path or str(Path(SAVED_MODELS_PATH) / KMEANS_FILENAME)
-            kmeans = joblib.load(load_path)
-            df["lat_lon_cluster"] = kmeans.predict(df[["latitude", "longitude"]])
-    else:
-        df["lat_lon_cluster"] = 0
-        LOGGER.warning("Missing latitude/longitude; lat_lon_cluster defaulted to 0")
-    LOGGER.info("lat_lon_cluster created")
-    return df
-
-
-def encode_season(df):
-    """Encode season strings into integer categories.
-
-    Args:
-        df (pandas.DataFrame): Input dataset.
-
-    Returns:
-        pandas.DataFrame: Dataset with season_encoded added.
-    """
-    mapping = {"kharif": 0, "rabi": 1, "summer": 2}
-    if "season" in df.columns:
-        df["season_encoded"] = df["season"].map(mapping).fillna(0).astype(int)
-    else:
-        df["season_encoded"] = 0
-        LOGGER.warning("Missing season column; season_encoded defaulted to 0")
-    LOGGER.info("season_encoded created")
-    return df
-
-
 def create_region_code(df: pd.DataFrame) -> pd.DataFrame:
     """Create a region code feature from existing columns.
 
@@ -148,29 +82,65 @@ def create_region_code(df: pd.DataFrame) -> pd.DataFrame:
     elif "state" in df.columns:
         df["region_code"] = pd.Categorical(df["state"].astype(str)).codes
         LOGGER.info("region_code created from state column")
-    elif "lat_lon_cluster" in df.columns:
-        df["region_code"] = df["lat_lon_cluster"].astype(int)
-        LOGGER.info("region_code derived from lat_lon_cluster")
     else:
-        df["region_code"] = 0
-        LOGGER.warning("Missing region/state/lat_lon_cluster; region_code defaulted to 0")
+        LOGGER.warning("Missing region/state; region_code not created")
     return df
 
 
-def apply_all(df, fit=True):
-    """Apply all feature engineering steps in order.
+def apply_engineering(
+    df: pd.DataFrame,
+    dataset_key: str,
+) -> tuple[pd.DataFrame, dict]:
+    """Apply dataset-specific feature engineering steps.
 
     Args:
         df (pandas.DataFrame): Input dataset.
-        fit (bool): Whether to fit spatial clustering.
+        dataset_key (str): Pipeline key used for config-driven features.
 
     Returns:
-        pandas.DataFrame: Dataset with engineered features added.
+        tuple[pandas.DataFrame, dict]: Updated dataset and report of actions.
     """
-    df = create_soil_quality_index(df)
-    df = create_fertility_score(df)
-    df = create_soil_health_score(df)
-    df = create_spatial_clusters(df, fit=fit)
-    df = encode_season(df)
-    df = create_region_code(df)
+    config = PIPELINE_CONFIGS.get(dataset_key, {})
+    engineered = list(config.get("engineered_features", []))
+    optional = list(config.get("optional_engineered_features", []))
+
+    created = []
+    skipped = []
+
+    if "fertility_score" in engineered:
+        if all(col in df.columns for col in ["N", "P", "K"]):
+            df = create_fertility_score(df)
+            created.append("fertility_score")
+        else:
+            skipped.append("fertility_score")
+
+    if "soil_quality_index" in engineered + optional:
+        required = ["N", "P", "K", "organic_carbon", "ph"]
+        if all(col in df.columns for col in required):
+            df = create_soil_quality_index(df)
+            created.append("soil_quality_index")
+        else:
+            skipped.append("soil_quality_index")
+
+    if "region_code" in engineered:
+        before_cols = set(df.columns)
+        df = create_region_code(df)
+        if "region_code" in df.columns and "region_code" not in before_cols:
+            created.append("region_code")
+        else:
+            skipped.append("region_code")
+
+    return df, {"created": created, "skipped": skipped}
+
+
+def apply_all(df: pd.DataFrame) -> pd.DataFrame:
+    """Apply feature engineering only when required inputs are available."""
+    if all(col in df.columns for col in ["N", "P", "K", "organic_carbon", "ph"]):
+        df = create_soil_quality_index(df)
+    if all(col in df.columns for col in ["N", "P", "K"]):
+        df = create_fertility_score(df)
+    if all(col in df.columns for col in ["N", "P", "K", "organic_carbon", "ph", "moisture"]):
+        df = create_soil_health_score(df)
+    if "region" in df.columns or "state" in df.columns:
+        df = create_region_code(df)
     return df
