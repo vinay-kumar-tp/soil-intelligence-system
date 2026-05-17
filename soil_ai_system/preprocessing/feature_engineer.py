@@ -4,7 +4,14 @@ from __future__ import annotations
 
 import pandas as pd
 
-from config import PREPROCESSING_LOG_FILE, PIPELINE_CONFIGS
+from config import (
+    DEFICIENCY_N_THRESHOLD,
+    DEFICIENCY_P_THRESHOLD,
+    DEFICIENCY_K_THRESHOLD,
+    PIPELINE_CONFIGS,
+    PREPROCESSING_LOG_FILE,
+    SEASON_LABELS,
+)
 from utils.logger import get_logger
 
 
@@ -84,6 +91,57 @@ def create_region_code(df: pd.DataFrame) -> pd.DataFrame:
         LOGGER.info("region_code created from state column")
     else:
         LOGGER.warning("Missing region/state; region_code not created")
+    return df
+
+
+def encode_season(df: pd.DataFrame) -> pd.DataFrame:
+    """Encode the season column to integer codes.
+
+    Args:
+        df (pandas.DataFrame): Input dataset.
+
+    Returns:
+        pandas.DataFrame: Dataset with season_encoded added.
+    """
+    if "season" not in df.columns:
+        df["season_encoded"] = 0
+        LOGGER.warning("season column missing; season_encoded set to 0")
+        return df
+
+    season_map = {label: idx for idx, label in enumerate(SEASON_LABELS)}
+    df["season_encoded"] = df["season"].astype(str).str.strip().str.lower().map(season_map).fillna(0).astype(int)
+    LOGGER.info("season_encoded created from season column")
+    return df
+
+
+def derive_nutrient_status(df: pd.DataFrame) -> pd.DataFrame:
+    """Derive a nutrient deficiency label from N, P, K values.
+
+    The label is assigned based on the most deficient nutrient.  When
+    all nutrients are above their thresholds the status is ``Balanced``.
+
+    Args:
+        df (pandas.DataFrame): Dataset with N, P, K columns.
+
+    Returns:
+        pandas.DataFrame: Dataset with nutrient_status column added.
+    """
+    required = ["N", "P", "K"]
+    if not all(col in df.columns for col in required):
+        LOGGER.warning("Missing N/P/K columns; nutrient_status not derived")
+        return df
+
+    n_def = df["N"] < DEFICIENCY_N_THRESHOLD
+    p_def = df["P"] < DEFICIENCY_P_THRESHOLD
+    k_def = df["K"] < DEFICIENCY_K_THRESHOLD
+
+    status = pd.Series("Balanced", index=df.index)
+    status[k_def] = "Potassium deficient"
+    status[p_def] = "Phosphorus deficient"
+    status[n_def] = "Nitrogen deficient"
+
+    df["nutrient_status"] = status
+    LOGGER.info("nutrient_status derived from NPK thresholds")
     return df
 
 

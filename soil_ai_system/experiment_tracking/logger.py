@@ -44,4 +44,6 @@ def log_experiment(model_name, params, metrics, notes=""):
             writer.writeheader()
         writer.writerow(row)
 
-    print(f"[ExperimentLog] {model_name} - acc={metrics.get('accuracy', 0):.4f}")
+    first_metric_val = next(iter(metrics.values()), 0)
+    first_metric_key = next(iter(metrics.keys()), "metric")
+    print(f"[ExperimentLog] {model_name} - {first_metric_key}={float(first_metric_val):.4f}")

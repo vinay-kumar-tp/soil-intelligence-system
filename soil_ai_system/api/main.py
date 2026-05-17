@@ -1,90 +1,76 @@
-from fastapi import FastAPI, HTTPException, Request
+"""Phase 3E - FastAPI Production Server.
+
+The entry point for the Soil Intelligence AI API.
+Wraps the inference engine in an async-safe, production-ready server.
+"""
+
+import sys
+from pathlib import Path
+
+_PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.schemas import SoilInput, PredictionResponse
-from api.predictor import run_prediction
-from utils.logger import get_logger
-import time
 
-logger = get_logger("api", "api.log")
+from api.middleware.logging import RequestTracingMiddleware
+from api.routes.inference import router as inference_router
+from inference.loaders import registry_cache
+import logging
 
-app = FastAPI(
-    title="Soil Intelligence API",
-    description="AI-powered soil quality prediction, crop recommendation, and explainable AI system",
-    version="2.0.0",
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Ensure logs go to inference log file
+logger = logging.getLogger("api")
+logger.setLevel(logging.INFO)
+file_handler = logging.FileHandler(_PROJECT_ROOT / "logs" / "api.log")
+file_handler.setFormatter(logging.Formatter("%(asctime)s | %(levelname)s | %(name)s | %(message)s"))
+logger.addHandler(file_handler)
 
 
-@app.middleware("http")
-async def log_requests(request: Request, call_next):
-    """Log request path, status, and latency for each HTTP call.
+def create_app() -> FastAPI:
+    """Factory pattern for FastAPI initialization."""
+    app = FastAPI(
+        title="Soil Intelligence System API",
+        version="3.0.0",
+        description="Phase 3 Production Inference System & AI Orchestration",
+    )
 
-    Args:
-        request (fastapi.Request): Incoming request object.
-        call_next (callable): Next handler in the middleware chain.
+    # Middleware
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    app.add_middleware(RequestTracingMiddleware)
 
-    Returns:
-        fastapi.Response: Response from downstream handler.
+    # Routes
+    app.include_router(inference_router, prefix="/api/v1")
 
-    Side Effects:
-        - Writes request logs to the API logger.
-    """
-    start = time.time()
-    response = await call_next(request)
-    elapsed = round((time.time() - start) * 1000, 2)
-    logger.info(f"{request.method} {request.url.path} - {response.status_code} - {elapsed}ms")
-    return response
+    @app.on_event("startup")
+    async def startup_event():
+        """Pre-warm the model cache during startup if desired.
+        
+        Note: The prompt specified 'DO NOT load all models at startup',
+        so we strictly rely on lazy loading upon first request. 
+        We just initialize the registry index here.
+        """
+        logger.info("Initializing API Startup Sequence...")
+        # Just loads the JSON index into memory, not the huge artifacts
+        registry_cache._load_registry()
+        logger.info("Registry index pre-loaded. Models will load lazily.")
 
+    @app.get("/")
+    async def root():
+        from fastapi.responses import RedirectResponse
+        return RedirectResponse(url="/docs")
 
-@app.get("/")
-def root():
-    """Return a basic API status message.
-
-    Args:
-        None
-
-    Returns:
-        dict: Service status payload.
-    """
-    return {"message": "Soil Intelligence System API v2.0 is running", "status": "healthy"}
-
-
-@app.get("/health")
-def health():
-    """Return health and model version information.
-
-    Args:
-        None
-
-    Returns:
-        dict: Health status payload.
-    """
-    return {"status": "healthy", "model_version": "v1"}
+    return app
 
 
-@app.post("/predict", response_model=PredictionResponse)
-def predict(soil_data: SoilInput):
-    """Run inference for a soil input payload.
+app = create_app()
 
-    Args:
-        soil_data (SoilInput): Request payload validated by Pydantic.
-
-    Returns:
-        PredictionResponse: Inference response payload.
-
-    Side Effects:
-        - Logs prediction errors when exceptions occur.
-    """
-    try:
-        return run_prediction(soil_data.dict())
-    except ValueError as exc:
-        raise HTTPException(status_code=422, detail=str(exc))
-    except Exception as exc:
-        logger.error(f"Prediction error: {str(exc)}")
-        raise HTTPException(status_code=500, detail="Internal prediction error")
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("api.main:app", host="0.0.0.0", port=8000, reload=True)

@@ -1,0 +1,96 @@
+======================================================================
+PHASE 2A — CLASSICAL ML BASELINES
+Task       : CROP
+Features   : 8  → ['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall', 'fertility_score']
+Train size : 1540
+Val size   : 330
+Test size  : 330
+Classes    : 22
+======================================================================
+
+Model                       Val Acc  Test Acc   Test F1   Time(s)
+-----------------------------------------------------------------
+LogisticRegression           0.9545    0.9455    0.9455       0.1
+RandomForest                 1.0000    0.9939    0.9939       0.4
+SVM                          0.9818    0.9970    0.9970       0.1
+GradientBoosting             0.9970    0.9879    0.9879      21.6
+
+======================================================================
+DETAILED METRICS
+======================================================================
+
+Model      : LogisticRegression
+Task       : crop
+Split      : val
+Accuracy   : 0.9545
+Precision  : 0.9611  (macro)
+Recall     : 0.9545  (macro)
+F1         : 0.9549  (macro)
+AUC-ROC    : 0.9983
+--------------------------------------------------
+Model      : LogisticRegression
+Task       : crop
+Split      : test
+Accuracy   : 0.9455
+Precision  : 0.9492  (macro)
+Recall     : 0.9455  (macro)
+F1         : 0.9455  (macro)
+AUC-ROC    : 0.9984
+--------------------------------------------------
+
+Model      : RandomForest
+Task       : crop
+Split      : val
+Accuracy   : 1.0
+Precision  : 1.0  (macro)
+Recall     : 1.0  (macro)
+F1         : 1.0  (macro)
+AUC-ROC    : 1.0
+--------------------------------------------------
+Model      : RandomForest
+Task       : crop
+Split      : test
+Accuracy   : 0.9939
+Precision  : 0.9943  (macro)
+Recall     : 0.9939  (macro)
+F1         : 0.9939  (macro)
+AUC-ROC    : 1.0
+--------------------------------------------------
+
+Model      : SVM
+Task       : crop
+Split      : val
+Accuracy   : 0.9818
+Precision  : 0.983  (macro)
+Recall     : 0.9818  (macro)
+F1         : 0.9819  (macro)
+AUC-ROC    : 0.9999
+--------------------------------------------------
+Model      : SVM
+Task       : crop
+Split      : test
+Accuracy   : 0.997
+Precision  : 0.9972  (macro)
+Recall     : 0.997  (macro)
+F1         : 0.997  (macro)
+AUC-ROC    : 1.0
+--------------------------------------------------
+
+Model      : GradientBoosting
+Task       : crop
+Split      : val
+Accuracy   : 0.997
+Precision  : 0.9972  (macro)
+Recall     : 0.997  (macro)
+F1         : 0.997  (macro)
+AUC-ROC    : 1.0
+--------------------------------------------------
+Model      : GradientBoosting
+Task       : crop
+Split      : test
+Accuracy   : 0.9879
+Precision  : 0.9884  (macro)
+Recall     : 0.9879  (macro)
+F1         : 0.9879  (macro)
+AUC-ROC    : 0.9999
+--------------------------------------------------

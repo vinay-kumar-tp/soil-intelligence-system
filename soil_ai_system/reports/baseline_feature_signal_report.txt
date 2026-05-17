@@ -1,0 +1,60 @@
+Baseline Feature Signal Report
+========================================
+
+Dataset: crop
+  Mutual Information (sorted):
+    humidity              MI=1.7300
+    K                     MI=1.6545
+    rainfall              MI=1.6183
+    fertility_score       MI=1.3907
+    P                     MI=1.3113
+    temperature           MI=1.0139
+    N                     MI=0.9823
+    ph                    MI=0.6817
+
+  RF Feature Importance (sorted):
+    humidity              imp=0.2000
+    rainfall              imp=0.1926
+    K                     imp=0.1775
+    P                     imp=0.1229
+    fertility_score       imp=0.1118
+    N                     imp=0.0935
+    temperature           imp=0.0697
+    ph                    imp=0.0321
+
+  Weak features (MI<0.01): []
+
+Dataset: fertility
+  Mutual Information (sorted):
+    N                     MI=0.4901
+    soil_quality_index    MI=0.1544
+    P                     MI=0.1344
+    fertility_score       MI=0.1211
+    ph                    MI=0.0875
+    K                     MI=0.0451
+    Fe                    MI=0.0404
+    B                     MI=0.0353
+    S                     MI=0.0268
+    ec                    MI=0.0222
+    organic_carbon        MI=0.0141
+    Zn                    MI=0.0138
+    Cu                    MI=0.0043
+    Mn                    MI=0.0000
+
+  RF Feature Importance (sorted):
+    N                     imp=0.4745
+    soil_quality_index    imp=0.1268
+    P                     imp=0.0931
+    fertility_score       imp=0.0675
+    K                     imp=0.0450
+    ph                    imp=0.0284
+    Fe                    imp=0.0267
+    Cu                    imp=0.0249
+    Zn                    imp=0.0243
+    Mn                    imp=0.0215
+    S                     imp=0.0188
+    ec                    imp=0.0186
+    organic_carbon        imp=0.0157
+    B                     imp=0.0141
+
+  Weak features (MI<0.01): ['Cu', 'Mn']

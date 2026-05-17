@@ -1,0 +1,34 @@
+Scaling Validation Report
+========================================
+
+Dataset: crop
+  All features in [0,1]: True
+  Scaler artifact exists: False
+  Status: WARN
+    N                     [0.0000, 1.0000]
+    P                     [0.0000, 1.0000]
+    K                     [0.0000, 1.0000]
+    temperature           [0.0000, 1.0000]
+    humidity              [0.0000, 1.0000]
+    ph                    [0.0000, 1.0000]
+    rainfall              [0.0000, 1.0000]
+    fertility_score       [0.0000, 1.0000]
+
+Dataset: fertility
+  All features in [0,1]: True
+  Scaler artifact exists: False
+  Status: WARN
+    N                     [0.0000, 1.0000]
+    P                     [0.0000, 1.0000]
+    K                     [0.0000, 1.0000]
+    ph                    [0.0000, 1.0000]
+    ec                    [0.0000, 1.0000]
+    organic_carbon        [0.0000, 1.0000]
+    S                     [0.0000, 1.0000]
+    Zn                    [-0.0301, 1.0000] ⚠
+    Fe                    [0.0000, 1.0000]
+    Cu                    [0.0000, 1.0000]
+    Mn                    [0.0000, 1.0000]
+    B                     [0.0000, 1.0000]
+    fertility_score       [0.0000, 1.0000]
+    soil_quality_index    [0.0000, 1.0000]

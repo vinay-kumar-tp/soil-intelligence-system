@@ -1,7 +1,19 @@
+"""API endpoint tests.
+
+The ``test_predict_valid`` test requires trained model artifacts and
+is skipped when the files don't exist (i.e. before Phase 2 training).
+"""
+
+from pathlib import Path
+
+import pytest
 from fastapi.testclient import TestClient
 from api.main import app
+from config import SAVED_MODELS_PATH
 
 client = TestClient(app)
+
+_MODELS_DIR = Path(__file__).resolve().parents[1] / SAVED_MODELS_PATH
 
 
 def test_health():
@@ -18,6 +30,10 @@ def test_health():
     assert r.json()["status"] == "healthy"
 
 
+@pytest.mark.skipif(
+    not (_MODELS_DIR / "xgboost_crop.pkl").exists(),
+    reason="Model not trained yet — run training.train_all first",
+)
 def test_predict_valid():
     """Verify predict endpoint accepts valid payloads.
 

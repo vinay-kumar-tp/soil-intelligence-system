@@ -60,6 +60,29 @@ REGIONAL_TARGET = None
 
 OPTIONAL_FEATURES = []
 
+# Processed dataset column lists (match actual CSV outputs from pipeline_runner)
+CROP_PROCESSED_FEATURE_COLS = CROP_FEATURES + ["fertility_score"]
+FERTILITY_PROCESSED_FEATURE_COLS = FERTILITY_FEATURES + ["fertility_score", "soil_quality_index"]
+REGIONAL_PROCESSED_FEATURE_COLS = REGIONAL_FEATURES + ["region_code"]
+
+# Unified feature superset for multi-task training and inference
+FEATURE_COLS = list(dict.fromkeys(
+    CROP_FEATURES + MICRONUTRIENT_FEATURES
+    + ["fertility_score", "soil_quality_index", "soil_health_score",
+       "lat_lon_cluster", "region_code", "season_encoded"]
+))
+
+# Feature columns expected from raw inference input (before engineering)
+INFERENCE_INPUT_FEATURES = [
+    "N", "P", "K", "ph", "ec", "organic_carbon",
+    "moisture", "temperature", "humidity", "rainfall",
+]
+
+# Nutrient deficiency derivation thresholds
+DEFICIENCY_N_THRESHOLD = 40
+DEFICIENCY_P_THRESHOLD = 20
+DEFICIENCY_K_THRESHOLD = 30
+
 # Engineered features (dataset-specific)
 CROP_ENGINEERED_FEATURES = ["fertility_score"]
 CROP_OPTIONAL_ENGINEERED_FEATURES = ["soil_quality_index"]

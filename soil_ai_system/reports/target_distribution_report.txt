@@ -1,0 +1,39 @@
+Target Distribution Report
+========================================
+
+Dataset: crop  target: crop
+  Classes: 22
+  Imbalance ratio (max/min): 1.00
+  Rare classes (<5%): []
+  Frequencies:
+    class 0: 100 (4.5%)
+    class 1: 100 (4.5%)
+    class 2: 100 (4.5%)
+    class 3: 100 (4.5%)
+    class 4: 100 (4.5%)
+    class 5: 100 (4.5%)
+    class 6: 100 (4.5%)
+    class 7: 100 (4.5%)
+    class 8: 100 (4.5%)
+    class 9: 100 (4.5%)
+    class 10: 100 (4.5%)
+    class 11: 100 (4.5%)
+    class 12: 100 (4.5%)
+    class 13: 100 (4.5%)
+    class 14: 100 (4.5%)
+    class 15: 100 (4.5%)
+    class 16: 100 (4.5%)
+    class 17: 100 (4.5%)
+    class 18: 100 (4.5%)
+    class 19: 100 (4.5%)
+    class 20: 100 (4.5%)
+    class 21: 100 (4.5%)
+
+Dataset: fertility  target: fertility_grade
+  Classes: 3
+  Imbalance ratio (max/min): 11.28
+  Rare classes (<5%): [2]
+  Frequencies:
+    class 0: 401 (45.6%)
+    class 1: 440 (50.0%)
+    class 2: 39 (4.4%)

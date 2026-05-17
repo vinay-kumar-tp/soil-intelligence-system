@@ -1,0 +1,34 @@
+Feature Distribution Report
+========================================
+
+Dataset: crop
+  Feature count: 8
+  Collapsed features (std≈0): []
+
+  N                     mean=0.3611  std=0.2637  skew=0.5097  kurt=-1.0582  range=[0.0000, 1.0000]
+  P                     mean=0.3882  std=0.2555  skew=0.8366  kurt=0.4005  range=[0.0000, 1.0000]
+  K                     mean=0.3900  std=0.2699  skew=1.0658  kurt=0.2033  range=[0.0000, 1.0000]
+  temperature           mean=0.4988  std=0.2063  skew=0.0628  kurt=0.0834  range=[0.0000, 1.0000]
+  humidity              mean=0.6624  std=0.2635  skew=-1.0883  kurt=0.2903  range=[0.0000, 1.0000]
+  ph                    mean=0.5058  std=0.1884  skew=0.1511  kurt=0.2819  range=[0.0000, 1.0000]
+  rainfall              mean=0.4260  std=0.2658  skew=0.6519  kurt=-0.4369  range=[0.0000, 1.0000]
+  fertility_score       mean=0.4493  std=0.2381  skew=0.8143  kurt=0.2846  range=[0.0000, 1.0000]
+
+Dataset: fertility
+  Feature count: 14
+  Collapsed features (std≈0): []
+
+  N                     mean=0.6013  std=0.2245  skew=-0.5675  kurt=-0.1012  range=[0.0000, 1.0000]
+  P                     mean=0.4786  std=0.2456  skew=0.9020  kurt=-0.1938  range=[0.0000, 1.0000]
+  K                     mean=0.5137  std=0.1929  skew=0.4214  kurt=-0.2617  range=[0.0000, 1.0000]
+  ph                    mean=0.5098  std=0.2228  skew=0.2483  kurt=-0.1861  range=[0.0000, 1.0000]
+  ec                    mean=0.5220  std=0.1666  skew=0.1030  kurt=-0.4577  range=[0.0000, 1.0000]
+  organic_carbon        mean=0.3716  std=0.2248  skew=0.0952  kurt=-0.7873  range=[0.0000, 1.0000]
+  S                     mean=0.4512  std=0.2159  skew=0.8990  kurt=0.3071  range=[0.0000, 1.0000]
+  Zn                    mean=0.4358  std=0.1868  skew=0.6113  kurt=0.1197  range=[-0.0301, 1.0000]
+  Fe                    mean=0.3118  std=0.2133  skew=0.4376  kurt=-0.7310  range=[0.0000, 1.0000]
+  Cu                    mean=0.4122  std=0.2213  skew=0.3665  kurt=-0.4331  range=[0.0000, 1.0000]
+  Mn                    mean=0.4401  std=0.2161  skew=0.3590  kurt=-0.2068  range=[0.0000, 1.0000]
+  B                     mean=0.4124  std=0.2901  skew=0.8859  kurt=-0.2104  range=[0.0000, 1.0000]
+  fertility_score       mean=0.5038  std=0.1874  skew=0.2453  kurt=-0.1547  range=[0.0000, 1.0000]
+  soil_quality_index    mean=0.5044  std=0.1866  skew=0.1625  kurt=-0.1776  range=[0.0000, 1.0000]

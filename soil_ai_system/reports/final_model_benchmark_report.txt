@@ -1,0 +1,54 @@
+======================================================================
+PHASE 2F — FINAL MODEL BENCHMARK REPORT
+Generated    : 2026-05-17 20:37:20
+Total models : 12
+======================================================================
+
+BENCHMARK COMPARISON TABLE
+=============================================================================================================================
+Model                                    Task                 Dataset                          Val Acc  Test Acc   Test F1
+-----------------------------------------------------------------------------------------------------------------------------
+GradientBoosting                         crop                 crop_processed.csv                0.9970    0.9879    0.9879
+LogisticRegression                       crop                 crop_processed.csv                0.9545    0.9455    0.9455
+RandomForest                             crop                 crop_processed.csv                1.0000    0.9939    0.9939
+SVM                                      crop                 crop_processed.csv                0.9818    0.9970    0.9970
+LogisticRegression                       fertility            fertility_processed.csv           0.7348    0.7273    0.6076
+RandomForest                             fertility            fertility_processed.csv           0.9470    0.8939    0.6932
+SVM                                      fertility            fertility_processed.csv           0.8333    0.8409    0.7065
+XGBoost                                  crop                 crop_processed.csv                0.9939    0.9939    0.9939
+XGBoost                                  fertility            fertility_processed.csv           0.9242    0.8788    0.7619
+XGBoost                                  deficiency           crop_processed.csv (derived)      1.0000    1.0000    1.0000
+MultiTaskDNN                             crop+fertility+deficiency crop_processed.csv                0.9758    0.9758         -
+StackedEnsemble (RF+XGB -> LogReg)       crop                 crop_processed.csv                     -    0.9970    0.9970
+
+======================================================================
+BEST MODEL (by crop test accuracy)
+  Model    : SVM
+  Task     : crop
+  Test Acc : 0.997
+  Test F1  : 0.997
+  Artifact : C:\Users\vinay\PROJECTS\soil-intelligence-system\soil_ai_system\saved_models\crop_pipeline\SVM_crop_v1.pkl
+
+======================================================================
+MODEL REGISTRY
+  Path     : C:\Users\vinay\PROJECTS\soil-intelligence-system\soil_ai_system\model_registry.json
+  Entries  : 12
+
+PHASE 2 COMPLETION STATUS
+--------------------------------------------------
+  [✓] Phase 2A — Classical ML Baselines
+  [✓] Phase 2B — XGBoost Production Models
+  [✓] Phase 2C — Multi-Task DNN
+  [✓] Phase 2D — Ensemble Architecture
+  [✓] Phase 2E — Explainability & Interpretability
+  [✓] Phase 2F — Model Registry & Benchmark Report
+
+INFERENCE-READY ARTIFACTS
+--------------------------------------------------
+  crop/XGBoost         : saved_models/crop_pipeline/xgboost_v1.pkl
+  fertility/XGBoost    : saved_models/fertility_pipeline/xgboost_v1.pkl
+  deficiency/XGBoost   : saved_models/deficiency_pipeline/xgboost_v1.pkl
+  DNN (multi-task)     : saved_models/dnn/multitask_dnn_v1.keras
+  Stacked Ensemble     : saved_models/ensemble/stacked_ensemble_v1.pkl
+
+DO NOT PROCEED TO DEPLOYMENT UNTIL AUDIT IS COMPLETE.

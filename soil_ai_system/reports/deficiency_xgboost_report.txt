@@ -1,0 +1,39 @@
+======================================================================
+PHASE 2B — XGBOOST PRODUCTION MODEL
+Task           : DEFICIENCY
+Best Iteration : 133
+Num Classes    : 4
+Num Features   : 8
+Train Time (s) : 0.18
+Tuned          : False
+======================================================================
+
+Model      : XGBoost_deficiency
+Task       : deficiency
+Split      : val
+Accuracy   : 1.0
+Precision  : 1.0  (macro)
+Recall     : 1.0  (macro)
+F1         : 1.0  (macro)
+AUC-ROC    : 1.0
+--------------------------------------------------
+Model      : XGBoost_deficiency
+Task       : deficiency
+Split      : test
+Accuracy   : 1.0
+Precision  : 1.0  (macro)
+Recall     : 1.0  (macro)
+F1         : 1.0  (macro)
+AUC-ROC    : 1.0
+--------------------------------------------------
+
+TOP-10 FEATURE IMPORTANCE
+--------------------------------------------------
+  N                              0.2554
+  P                              0.2386
+  K                              0.1789
+  rainfall                       0.1365
+  fertility_score                0.0986
+  humidity                       0.0521
+  ph                             0.0218
+  temperature                    0.0181

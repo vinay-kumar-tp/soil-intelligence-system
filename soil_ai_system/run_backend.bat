@@ -1,0 +1,6 @@
+@echo off
+cd %~dp0
+echo Starting Soil Intelligence System API Backend...
+echo Enforcing Virtual Environment usage...
+..\.venv\Scripts\python.exe -m uvicorn api.main:app --reload --host 127.0.0.1 --port 8000
+pause

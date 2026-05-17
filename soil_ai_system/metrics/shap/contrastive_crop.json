@@ -1,0 +1,18 @@
+{
+  "predicted_crop": "8",
+  "confidence": 0.9718,
+  "runner_up_crop": "20",
+  "runner_up_confidence": 0.0033,
+  "confidence_gap": 0.9685,
+  "why_not_runner_up": "'8' scored 97.2% vs '20' at 0.3%.",
+  "feature_context": {
+    "N": 0.5,
+    "P": 0.3089430894308943,
+    "K": 0.4117647058823529,
+    "temperature": 0.4451142319027497,
+    "humidity": 0.8675598349150289,
+    "ph": 0.431811098474419,
+    "rainfall": 0.7764954460806845,
+    "fertility_score": 0.4673539518900345
+  }
+}

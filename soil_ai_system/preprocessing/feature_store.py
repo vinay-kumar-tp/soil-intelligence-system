@@ -84,17 +84,37 @@ def load_pipeline(
 ) -> Dict[str, object]:
     """Load preprocessing artifacts for a model version.
 
+    Missing artifacts are returned as ``None`` rather than raising errors,
+    since not every pipeline produces all three artifact types.
+
     Args:
         version (str | None): Model version folder name.
+        artifact_dir (str | None): Explicit artifact directory override.
+        dataset_key (str | None): Pipeline key for config-driven lookup.
 
     Returns:
-        dict: Loaded scaler, encoders, and KMeans artifacts.
+        dict: Loaded scaler, encoders, and KMeans artifacts (or None).
     """
     path = _resolve_artifact_dir(artifact_dir, dataset_key, version)
-    payload = {
-        "scaler": joblib.load(path / SCALER_FILENAME),
-        "encoders": joblib.load(path / LABEL_ENCODERS_FILENAME),
-        "kmeans": joblib.load(path / KMEANS_FILENAME),
-    }
+    payload: Dict[str, object] = {"scaler": None, "encoders": {}, "kmeans": None}
+
+    scaler_path = path / SCALER_FILENAME
+    if scaler_path.exists():
+        payload["scaler"] = joblib.load(scaler_path)
+    else:
+        LOGGER.warning("Scaler not found at %s", scaler_path)
+
+    encoder_path = path / LABEL_ENCODERS_FILENAME
+    if encoder_path.exists():
+        loaded = joblib.load(encoder_path)
+        payload["encoders"] = loaded.get("encoders", loaded) if isinstance(loaded, dict) else loaded
+    else:
+        LOGGER.warning("Label encoders not found at %s", encoder_path)
+
+    kmeans_path = path / KMEANS_FILENAME
+    if kmeans_path.exists():
+        payload["kmeans"] = joblib.load(kmeans_path)
+
     LOGGER.info("Pipeline loaded from %s", path)
     return payload
+

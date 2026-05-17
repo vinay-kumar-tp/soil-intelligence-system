@@ -1,0 +1,39 @@
+======================================================================
+PHASE 2B — XGBOOST PRODUCTION MODEL
+Task           : CROP
+Best Iteration : 221
+Num Classes    : 22
+Num Features   : 8
+Train Time (s) : 1.0
+Tuned          : False
+======================================================================
+
+Model      : XGBoost_crop
+Task       : crop
+Split      : val
+Accuracy   : 0.9939
+Precision  : 0.9943  (macro)
+Recall     : 0.9939  (macro)
+F1         : 0.9939  (macro)
+AUC-ROC    : 1.0
+--------------------------------------------------
+Model      : XGBoost_crop
+Task       : crop
+Split      : test
+Accuracy   : 0.9939
+Precision  : 0.9943  (macro)
+Recall     : 0.9939  (macro)
+F1         : 0.9939  (macro)
+AUC-ROC    : 1.0
+--------------------------------------------------
+
+TOP-10 FEATURE IMPORTANCE
+--------------------------------------------------
+  N                              0.1657
+  humidity                       0.1572
+  K                              0.1523
+  P                              0.1412
+  rainfall                       0.1335
+  fertility_score                0.1064
+  temperature                    0.0916
+  ph                             0.0521

@@ -1,0 +1,29 @@
+Processed Dataset Integrity Report
+========================================
+
+Dataset: crop
+  Shape: (2200, 9)
+  Nulls: 0
+  Infs: 0
+  Duplicates: 0
+  Missing expected cols: []
+  Dtypes: {dtype('float64'): 8, dtype('int64'): 1}
+  Status: PASS
+
+Dataset: fertility
+  Shape: (880, 15)
+  Nulls: 0
+  Infs: 0
+  Duplicates: 0
+  Missing expected cols: []
+  Dtypes: {dtype('float64'): 14, dtype('int64'): 1}
+  Status: PASS
+
+Dataset: regional
+  Shape: (875, 5)
+  Nulls: 0
+  Infs: 0
+  Duplicates: 0
+  Missing expected cols: []
+  Dtypes: {dtype('float64'): 5}
+  Status: PASS

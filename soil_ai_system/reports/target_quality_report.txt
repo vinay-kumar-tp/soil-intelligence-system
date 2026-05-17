@@ -1,0 +1,16 @@
+Target Quality Report
+========================================
+
+Dataset: crop  target: crop
+  Empty/NaN labels: 0
+  Unique labels: 22
+  Target column in features: False
+  Leakage suspects (|corr|>0.99): []
+  Status: PASS
+
+Dataset: fertility  target: fertility_grade
+  Empty/NaN labels: 0
+  Unique labels: 3
+  Target column in features: False
+  Leakage suspects (|corr|>0.99): []
+  Status: PASS

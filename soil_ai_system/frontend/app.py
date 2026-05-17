@@ -1,0 +1,335 @@
+import streamlit as st
+import sys
+from pathlib import Path
+import time
+
+# Ensure project root on path
+_PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+from frontend.services.api_client import get_system_health, predict_soil
+from frontend.visualizations.charts import plot_confidence_gauge, plot_feature_importance
+from frontend.components.cards import render_recommendation_card, render_contrastive_panel
+from frontend.components.decision_cards import (
+    render_confidence_indicator,
+    render_hybrid_intelligence_score_gauge,
+    render_agronomic_narrative,
+    render_prioritized_recommendations,
+    render_comparative_crops
+)
+
+st.set_page_config(
+    page_title="Ecoland - Organic Farming",
+    page_icon="🌿",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+
+# Olive Green & White Theme CSS
+st.markdown("""
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+    
+    html, body, [class*="css"] {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    
+    /* Clean White/Light Olive Background */
+    .stApp {
+        background-color: #fcfdfc;
+        color: #1f2937;
+    }
+    
+    /* Top Navigation Mock */
+    .top-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+        margin-bottom: 4rem;
+        border-bottom: 1px solid rgba(85, 107, 47, 0.2);
+    }
+    .logo { color: #556b2f; font-weight: 800; font-size: 1.5rem; display: flex; align-items: center; gap: 10px;}
+    .nav-links { display: flex; gap: 30px; color: #374151; font-weight: 600; font-size: 1rem;}
+    
+    /* Hero Section */
+    .hero-subtitle {
+        color: #65a30d;
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .main-header {
+        color: #2b3a18;
+        font-size: 4.5rem;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        max-width: 800px;
+    }
+    .hero-desc {
+        color: #4b5563;
+        font-size: 1.2rem;
+        max-width: 600px;
+        margin-bottom: 3rem;
+        line-height: 1.6;
+    }
+    
+    /* Square Metric Blocks */
+    .block-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-bottom: 3rem;
+    }
+    .square-block {
+        border-radius: 20px;
+        padding: 2.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(85, 107, 47, 0.1);
+        transition: transform 0.3s ease;
+        height: 250px;
+    }
+    .square-block:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(85, 107, 47, 0.2); }
+    .block-icon {
+        background: rgba(255,255,255,0.2);
+        border-radius: 50%;
+        width: 70px;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .block-green { background: linear-gradient(135deg, #65a30d, #4d7c0f); color: white; }
+    .block-brown { background: linear-gradient(135deg, #78350f, #451a03); color: white; }
+    .block-tan { background: linear-gradient(135deg, #d4a373, #b59874); color: white; }
+    
+    .metric-title { font-size: 1.1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; opacity: 0.9;}
+    .metric-value { font-size: 2.2rem; font-weight: 800; margin: 0; text-transform: capitalize; }
+    
+    /* Form Area */
+    .form-panel {
+        background: #f4f7f4;
+        border: 1px solid rgba(85, 107, 47, 0.2);
+        border-radius: 24px;
+        padding: 2.5rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    }
+    
+    .stButton>button {
+        background: #556b2f;
+        color: white;
+        border-radius: 50px;
+        padding: 1rem 2.5rem;
+        font-weight: 800;
+        font-size: 1.1rem;
+        border: none;
+        width: auto;
+        box-shadow: 0 10px 25px rgba(85, 107, 47, 0.3);
+    }
+    .stButton>button:hover {
+        background: #4d7c0f;
+        color: white;
+    }
+    
+    /* Input Styling */
+    .stNumberInput>div>div>input, .stSelectbox>div>div>div { 
+        font-size: 1.1rem; 
+        padding: 0.5rem; 
+        border-radius: 8px; 
+        background: white; 
+        color: #1f2937; 
+        border: 1px solid #d1d5db;
+    }
+    
+    /* Text Overrides for Form */
+    .stMarkdown h3 { color: #2b3a18 !important; }
+    label { color: #4b5563 !important; font-weight: 600 !important; }
+</style>
+""", unsafe_allow_html=True)
+
+def page_predictive_analysis():
+    # Top Navigation Simulation
+    st.markdown("""
+    <div class="top-nav">
+        <div class="logo">🌾 Ecoland</div>
+        <div class="nav-links">
+            <span>Home</span>
+            <span>About Us</span>
+            <span>Precision Services ▾</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Hero Section
+    st.markdown("""
+    <div class="hero-subtitle">We are Producing Natural Products</div>
+    <div class="main-header">Organic Farming<br>and Agriculture</div>
+    <div class="hero-desc">Configure your field's soil metrics to generate AI-driven agronomic recommendations. A successful farm utilizes precision data to maximize yield and minimize chemical runoff.</div>
+    """, unsafe_allow_html=True)
+
+    # --- Input Dashboard ---
+    with st.container():
+        st.markdown("<div class='form-panel'>", unsafe_allow_html=True)
+        st.markdown("<h3 style='color: white; margin-bottom: 20px;'>Field Telemetry Inputs</h3>", unsafe_allow_html=True)
+        
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            n_val = st.number_input("Nitrogen (N)", 0.0, 200.0, 90.0)
+            temp_val = st.number_input("Temperature (°C)", -10.0, 60.0, 25.0)
+        with col2:
+            p_val = st.number_input("Phosphorus (P)", 0.0, 200.0, 42.0)
+            hum_val = st.number_input("Humidity (%)", 0.0, 100.0, 82.0)
+        with col3:
+            k_val = st.number_input("Potassium (K)", 0.0, 200.0, 43.0)
+            ph_val = st.number_input("Soil pH", 0.0, 14.0, 6.5)
+        with col4:
+            rain_val = st.number_input("Rainfall (mm)", 0.0, 5000.0, 200.0)
+            region = st.selectbox("Region", ["Unknown", "southern_india", "northern_plains", "coastal"])
+            
+        st.markdown("<br>", unsafe_allow_html=True)
+        generate = st.button("Discover Strategy ➔")
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    if generate:
+        with st.spinner("Analyzing soil profile..."):
+            payload = {
+                "N": n_val, "P": p_val, "K": k_val,
+                "temperature": temp_val, "humidity": hum_val,
+                "ph": ph_val, "rainfall": rain_val,
+                "region": region if region != "Unknown" else None
+            }
+            
+            result = predict_soil(payload)
+            time.sleep(0.5) 
+            
+            if result.get("status") == "success":
+                preds = result["predictions"]
+                
+                st.markdown("<br><br><h2 style='color:#2b3a18; text-align:center; margin-bottom:30px;'>AI Strategy Results</h2>", unsafe_allow_html=True)
+                
+                # --- Square Blocks Grid (Reference Image 2) ---
+                crop = preds["crop"].get("prediction", "N/A")
+                fert = preds["fertility"].get("prediction", "N/A")
+                defi = preds["deficiency"].get("prediction", "N/A")
+                
+                st.markdown(f"""
+                <div class="block-grid">
+                    <div class="square-block block-green">
+                        <div class="block-icon">🌱</div>
+                        <div class="metric-title">Optimal Crop</div>
+                        <div class="metric-value">{str(crop).capitalize()}</div>
+                    </div>
+                    <div class="square-block block-tan">
+                        <div class="block-icon">📊</div>
+                        <div class="metric-title">Fertility Grade</div>
+                        <div class="metric-value">{str(fert).capitalize()}</div>
+                    </div>
+                    <div class="square-block block-brown">
+                        <div class="block-icon">💧</div>
+                        <div class="metric-title">Nutrient Status</div>
+                        <div class="metric-value" style="font-size:1.8rem;">{str(defi).capitalize()}</div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+
+                # --- Phase 6 Decision Intelligence Layer ---
+                dec_support = result.get("decision_support", {})
+                if dec_support and "error" not in dec_support:
+                    st.markdown("<br>", unsafe_allow_html=True)
+                    
+                    # 1. Dual Column layout for core reasoning & narratives
+                    col_reasoning, col_actions = st.columns([1, 1])
+                    with col_reasoning:
+                        # Confidence indicator & Score gauge
+                        render_confidence_indicator(dec_support.get("confidence", {}))
+                        render_hybrid_intelligence_score_gauge(dec_support.get("hybrid_intelligence_score", {}))
+                        
+                    with col_actions:
+                        # Agronomic narrative & Prioritized recommendation cards
+                        render_agronomic_narrative(dec_support.get("narrative", ""))
+                        render_prioritized_recommendations(dec_support.get("prioritized_actions", {}))
+                        
+                    st.markdown("<br>", unsafe_allow_html=True)
+                    
+                    # 2. Alternative Crop Suitability Index
+                    render_comparative_crops(dec_support.get("top_k_crops", []))
+                    st.markdown("<br>", unsafe_allow_html=True)
+
+                # --- Explainability Panel ---
+                st.markdown("### 🔍 Model Explainability & Local SHAP Analysis")
+                expls = result.get("explanations", {})
+                if "feature_importance" in expls and "error" not in expls["feature_importance"]:
+                    plot_feature_importance(expls["feature_importance"])
+            else:
+                st.error(f"Inference Engine Failed: {result.get('message', 'Unknown error')}")
+
+def render_sidebar():
+    with st.sidebar:
+        st.markdown("<h2 style='text-align: center; color: #4d7c0f;'>ECOLAND</h2>", unsafe_allow_html=True)
+        st.markdown("---")
+        page = st.radio("Navigation", ["Precision Services", "Operational Observability"])
+        st.markdown("---")
+        st.caption("AI Operations Dashboard v5.0")
+        return page
+
+def page_diagnostics():
+    from frontend.services.api_client import get_system_health, get_system_metrics
+    st.markdown("<p class='main-header'>Operational Observability</p>", unsafe_allow_html=True)
+    st.markdown("<p class='sub-header'>System metrics, latency tracking, and inference analytics.</p>", unsafe_allow_html=True)
+    
+    st.markdown("### System Health", unsafe_allow_html=True)
+    health = get_system_health()
+    if health.get("status") == "healthy":
+        st.success("🟢 API is ONLINE and HEALTHY")
+    else:
+        st.error(f"🔴 API OFFLINE: {health.get('message')}")
+
+    st.markdown("### Operational Metrics", unsafe_allow_html=True)
+    metrics = get_system_metrics()
+    
+    if "error" in metrics:
+        st.warning("Metrics endpoint currently unreachable.")
+        return
+        
+    st.markdown("<div class='form-panel'>", unsafe_allow_html=True)
+    
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.metric("Total Requests", metrics.get("total_requests", 0))
+    with col2:
+        st.metric("Error Rate", f"{metrics.get('error_rate_percent', 0)}%")
+    with col3:
+        st.metric("Avg Latency", f"{metrics.get('average_latency_ms', 0)} ms")
+    with col4:
+        st.metric("Cache Hit Ratio", f"{metrics.get('cache_hit_ratio', 0) * 100}%")
+        
+    st.markdown("---")
+    
+    st.markdown("#### Inference Analytics (Top Models)")
+    preds = metrics.get("top_predictions", {})
+    if preds:
+        st.bar_chart(preds)
+    else:
+        st.info("No predictions recorded in this session.")
+        
+    st.markdown("</div>", unsafe_allow_html=True)
+
+def main():
+    page = render_sidebar()
+    if page == "Precision Services":
+        page_predictive_analysis()
+    else:
+        page_diagnostics()
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,46 @@
+======================================================================
+PHASE 2E — EXPLAINABILITY & INTERPRETABILITY REPORT
+======================================================================
+
+SHAP METHOD: TreeExplainer for XGBoost | DeepExplainer/KernelExplainer for DNN
+PLOTS: reports/figures/shap/
+
+========================================
+Task: CROP XGBoost
+Top Features by Mean |SHAP|:
+    humidity                       0.7599
+    rainfall                       0.7513
+    P                              0.5184
+    K                              0.4435
+    N                              0.3612
+    fertility_score                0.3108
+    temperature                    0.1603
+
+========================================
+Task: FERTILITY XGBoost
+Top Features by Mean |SHAP|:
+    N                              1.3760
+    P                              0.7332
+    soil_quality_index             0.1492
+    K                              0.1425
+    Cu                             0.1360
+    organic_carbon                 0.1232
+    Fe                             0.1182
+
+========================================
+Task: DEFICIENCY XGBoost
+Top Features by Mean |SHAP|:
+    N                              1.5137
+    K                              0.9929
+    P                              0.8554
+    fertility_score                0.3331
+    rainfall                       0.1766
+    humidity                       0.0811
+    temperature                    0.0165
+
+========================================
+CONTRASTIVE EXPLANATION (Sample #0)
+  Predicted crop : 8  (97.2%)
+  Runner-up crop : 20  (0.3%)
+  Gap            : 96.9%
+  Explanation    : '8' scored 97.2% vs '20' at 0.3%.

@@ -1,0 +1,7 @@
+=== STARTUP VALIDATION REPORT ===
+Environment: production
+Python: 3.11.9 (C:\Users\vinay\PROJECTS\soil-intelligence-system\.venv\Scripts\python.exe)
+Venv Active: True
+
+--- ISSUES DETECTED ---
+No issues detected. System is operational.

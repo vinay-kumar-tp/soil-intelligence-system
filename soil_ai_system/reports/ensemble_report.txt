@@ -1,0 +1,26 @@
+======================================================================
+PHASE 2D — STACKED ENSEMBLE ARCHITECTURE
+Task           : CROP CLASSIFICATION
+Base Learners  : ['rf', 'xgb']
+Meta Learner   : LogisticRegression
+OOF Folds      : 5
+Meta Features  : [1870, 44]
+Train Time (s) : 7.4
+======================================================================
+
+LEAKAGE PREVENTION
+  - Test set isolated before OOF generation
+  - Base learners trained only on train folds
+  - Meta learner sees only OOF predictions
+
+TEST RESULTS
+--------------------------------------------------
+Model      : StackedEnsemble
+Task       : crop
+Split      : test
+Accuracy   : 0.997
+Precision  : 0.9972  (macro)
+Recall     : 0.997  (macro)
+F1         : 0.997  (macro)
+AUC-ROC    : 1.0
+--------------------------------------------------

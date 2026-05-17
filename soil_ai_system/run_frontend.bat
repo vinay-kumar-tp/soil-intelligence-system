@@ -1,0 +1,6 @@
+@echo off
+cd %~dp0
+echo Starting Soil Intelligence System Enterprise Frontend...
+echo Enforcing Virtual Environment usage...
+..\.venv\Scripts\python.exe -m streamlit run frontend\app.py
+pause

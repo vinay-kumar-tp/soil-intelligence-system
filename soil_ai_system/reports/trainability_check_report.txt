@@ -1,0 +1,12 @@
+Trainability Check Report
+========================================
+
+Dataset: crop  features=8  samples=2200
+  RandomForest: OK  acc=0.9364
+  LogisticRegression: OK  acc=0.9477
+  Trainable: True
+
+Dataset: fertility  features=14  samples=880
+  RandomForest: OK  acc=0.8807
+  LogisticRegression: OK  acc=0.8864
+  Trainable: True

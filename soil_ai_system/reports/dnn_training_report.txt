@@ -1,0 +1,41 @@
+======================================================================
+PHASE 2C — MULTI-TASK DNN TRAINING REPORT
+Architecture   : 128-BN-DO-64-BN-DO-32-DO + 3 task heads
+Input dim      : 8
+Crop classes   : 22
+Fert classes   : 3
+Def classes    : 4
+Epochs run     : 45
+Train time (s) : 10.1
+Model saved    : C:\Users\vinay\PROJECTS\soil-intelligence-system\soil_ai_system\saved_models\dnn\multitask_dnn_v1.keras
+======================================================================
+
+TEST RESULTS
+--------------------------------------------------
+Model      : DNN
+Task       : crop
+Split      : test
+Accuracy   : 0.9758
+Precision  : 0.9797  (macro)
+Recall     : 0.9758  (macro)
+F1         : 0.9756  (macro)
+AUC-ROC    : 1.0
+--------------------------------------------------
+Model      : DNN
+Task       : fertility
+Split      : test
+Accuracy   : 0.9303
+Precision  : 0.9309  (macro)
+Recall     : 0.9324  (macro)
+F1         : 0.9313  (macro)
+AUC-ROC    : 0.9896
+--------------------------------------------------
+Model      : DNN
+Task       : deficiency
+Split      : test
+Accuracy   : 0.9636
+Precision  : 0.9606  (macro)
+Recall     : 0.9425  (macro)
+F1         : 0.951  (macro)
+AUC-ROC    : 0.994
+--------------------------------------------------

@@ -1,0 +1,18 @@
+Split Validation Report
+========================================
+
+Dataset: crop
+  Train: 1540  Val: 330  Test: 330
+  Overlap train∩val: 0
+  Overlap train∩test: 0
+  Overlap val∩test: 0
+  Max class distribution drift: 0.0000
+  Status: PASS
+
+Dataset: fertility
+  Train: 616  Val: 132  Test: 132
+  Overlap train∩val: 0
+  Overlap train∩test: 0
+  Overlap val∩test: 0
+  Max class distribution drift: 0.0016
+  Status: PASS

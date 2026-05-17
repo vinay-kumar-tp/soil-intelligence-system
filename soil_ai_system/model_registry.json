@@ -1,0 +1,343 @@
+[
+  {
+    "version": "v1",
+    "model_name": "GradientBoosting",
+    "task": "crop",
+    "dataset": "crop_processed.csv",
+    "training_timestamp": "2026-05-17T14:57:42.995186+00:00",
+    "features": [
+      "N",
+      "P",
+      "K",
+      "temperature",
+      "humidity",
+      "ph",
+      "rainfall",
+      "fertility_score"
+    ],
+    "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\crop_pipeline\\GradientBoosting_crop_v1.pkl",
+    "artifact_exists": true,
+    "metrics": {
+      "val_accuracy": 0.997,
+      "test_accuracy": 0.9879,
+      "test_f1_macro": 0.9879,
+      "test_precision_macro": 0.9884,
+      "test_recall_macro": 0.9879,
+      "train_time_s": 23.49
+    }
+  },
+  {
+    "version": "v1",
+    "model_name": "LogisticRegression",
+    "task": "crop",
+    "dataset": "crop_processed.csv",
+    "training_timestamp": "2026-05-17T14:57:42.995707+00:00",
+    "features": [
+      "N",
+      "P",
+      "K",
+      "temperature",
+      "humidity",
+      "ph",
+      "rainfall",
+      "fertility_score"
+    ],
+    "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\crop_pipeline\\LogisticRegression_crop_v1.pkl",
+    "artifact_exists": true,
+    "metrics": {
+      "val_accuracy": 0.9545,
+      "test_accuracy": 0.9455,
+      "test_f1_macro": 0.9455,
+      "test_precision_macro": 0.9492,
+      "test_recall_macro": 0.9455,
+      "train_time_s": 0.15
+    }
+  },
+  {
+    "version": "v1",
+    "model_name": "RandomForest",
+    "task": "crop",
+    "dataset": "crop_processed.csv",
+    "training_timestamp": "2026-05-17T14:57:42.996227+00:00",
+    "features": [
+      "N",
+      "P",
+      "K",
+      "temperature",
+      "humidity",
+      "ph",
+      "rainfall",
+      "fertility_score"
+    ],
+    "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\crop_pipeline\\RandomForest_crop_v1.pkl",
+    "artifact_exists": true,
+    "metrics": {
+      "val_accuracy": 1.0,
+      "test_accuracy": 0.9939,
+      "test_f1_macro": 0.9939,
+      "test_precision_macro": 0.9943,
+      "test_recall_macro": 0.9939,
+      "train_time_s": 0.43
+    }
+  },
+  {
+    "version": "v1",
+    "model_name": "SVM",
+    "task": "crop",
+    "dataset": "crop_processed.csv",
+    "training_timestamp": "2026-05-17T14:57:42.996227+00:00",
+    "features": [
+      "N",
+      "P",
+      "K",
+      "temperature",
+      "humidity",
+      "ph",
+      "rainfall",
+      "fertility_score"
+    ],
+    "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\crop_pipeline\\SVM_crop_v1.pkl",
+    "artifact_exists": true,
+    "metrics": {
+      "val_accuracy": 0.9818,
+      "test_accuracy": 0.997,
+      "test_f1_macro": 0.997,
+      "test_precision_macro": 0.9972,
+      "test_recall_macro": 0.997,
+      "train_time_s": 0.11
+    }
+  },
+  {
+    "version": "v1",
+    "model_name": "LogisticRegression",
+    "task": "fertility",
+    "dataset": "fertility_processed.csv",
+    "training_timestamp": "2026-05-17T14:57:42.996227+00:00",
+    "features": [
+      "N",
+      "P",
+      "K",
+      "ph",
+      "ec",
+      "organic_carbon",
+      "S",
+      "Zn",
+      "Fe",
+      "Cu",
+      "Mn",
+      "B",
+      "fertility_score",
+      "soil_quality_index"
+    ],
+    "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\fertility_pipeline\\LogisticRegression_fertility_v1.pkl",
+    "artifact_exists": true,
+    "metrics": {
+      "val_accuracy": 0.7348,
+      "test_accuracy": 0.7273,
+      "test_f1_macro": 0.6076,
+      "test_precision_macro": 0.6402,
+      "test_recall_macro": 0.7146,
+      "train_time_s": 0.01
+    }
+  },
+  {
+    "version": "v1",
+    "model_name": "RandomForest",
+    "task": "fertility",
+    "dataset": "fertility_processed.csv",
+    "training_timestamp": "2026-05-17T14:57:42.996227+00:00",
+    "features": [
+      "N",
+      "P",
+      "K",
+      "ph",
+      "ec",
+      "organic_carbon",
+      "S",
+      "Zn",
+      "Fe",
+      "Cu",
+      "Mn",
+      "B",
+      "fertility_score",
+      "soil_quality_index"
+    ],
+    "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\fertility_pipeline\\RandomForest_fertility_v1.pkl",
+    "artifact_exists": true,
+    "metrics": {
+      "val_accuracy": 0.947,
+      "test_accuracy": 0.8939,
+      "test_f1_macro": 0.6932,
+      "test_precision_macro": 0.7685,
+      "test_recall_macro": 0.6742,
+      "train_time_s": 0.43
+    }
+  },
+  {
+    "version": "v1",
+    "model_name": "SVM",
+    "task": "fertility",
+    "dataset": "fertility_processed.csv",
+    "training_timestamp": "2026-05-17T14:57:42.996227+00:00",
+    "features": [
+      "N",
+      "P",
+      "K",
+      "ph",
+      "ec",
+      "organic_carbon",
+      "S",
+      "Zn",
+      "Fe",
+      "Cu",
+      "Mn",
+      "B",
+      "fertility_score",
+      "soil_quality_index"
+    ],
+    "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\fertility_pipeline\\SVM_fertility_v1.pkl",
+    "artifact_exists": true,
+    "metrics": {
+      "val_accuracy": 0.8333,
+      "test_accuracy": 0.8409,
+      "test_f1_macro": 0.7065,
+      "test_precision_macro": 0.6911,
+      "test_recall_macro": 0.7389,
+      "train_time_s": 0.04
+    }
+  },
+  {
+    "version": "v1",
+    "model_name": "XGBoost",
+    "task": "crop",
+    "dataset": "crop_processed.csv",
+    "training_timestamp": "2026-05-17T14:57:42.997743+00:00",
+    "features": [
+      "N",
+      "P",
+      "K",
+      "temperature",
+      "humidity",
+      "ph",
+      "rainfall",
+      "fertility_score"
+    ],
+    "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\crop_pipeline\\xgboost_v1.pkl",
+    "artifact_exists": true,
+    "metrics": {
+      "val_accuracy": 0.9939,
+      "test_accuracy": 0.9939,
+      "test_f1_macro": 0.9939,
+      "best_iteration": 221,
+      "train_time_s": 1.01
+    }
+  },
+  {
+    "version": "v1",
+    "model_name": "XGBoost",
+    "task": "fertility",
+    "dataset": "fertility_processed.csv",
+    "training_timestamp": "2026-05-17T14:57:42.997743+00:00",
+    "features": [
+      "N",
+      "P",
+      "K",
+      "ph",
+      "ec",
+      "organic_carbon",
+      "S",
+      "Zn",
+      "Fe",
+      "Cu",
+      "Mn",
+      "B",
+      "fertility_score",
+      "soil_quality_index"
+    ],
+    "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\fertility_pipeline\\xgboost_v1.pkl",
+    "artifact_exists": true,
+    "metrics": {
+      "val_accuracy": 0.9242,
+      "test_accuracy": 0.8788,
+      "test_f1_macro": 0.7619,
+      "best_iteration": 50,
+      "train_time_s": 0.12
+    }
+  },
+  {
+    "version": "v1",
+    "model_name": "XGBoost",
+    "task": "deficiency",
+    "dataset": "crop_processed.csv (derived)",
+    "training_timestamp": "2026-05-17T14:57:42.997743+00:00",
+    "features": [
+      "N",
+      "P",
+      "K",
+      "temperature",
+      "humidity",
+      "ph",
+      "rainfall",
+      "fertility_score"
+    ],
+    "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\deficiency_pipeline\\xgboost_v1.pkl",
+    "artifact_exists": true,
+    "metrics": {
+      "val_accuracy": 1.0,
+      "test_accuracy": 1.0,
+      "test_f1_macro": 1.0,
+      "best_iteration": 133,
+      "train_time_s": 0.24
+    }
+  },
+  {
+    "version": "v1",
+    "model_name": "StackedEnsemble (RF+XGB -> LogReg)",
+    "task": "crop",
+    "dataset": "crop_processed.csv",
+    "training_timestamp": "2026-05-17T14:57:42.998753+00:00",
+    "features": [
+      "N",
+      "P",
+      "K",
+      "temperature",
+      "humidity",
+      "ph",
+      "rainfall",
+      "fertility_score"
+    ],
+    "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\ensemble\\stacked_ensemble_v1.pkl",
+    "artifact_exists": true,
+    "metrics": {
+      "test_accuracy": 0.997,
+      "test_f1_macro": 0.997,
+      "train_time_s": 7.7
+    }
+  },
+  {
+    "version": "v1",
+    "model_name": "MultiTaskDNN",
+    "task": "crop+fertility+deficiency",
+    "dataset": "crop_processed.csv",
+    "training_timestamp": "2026-05-17T15:03:55.663950+00:00",
+    "features": [
+      "N",
+      "P",
+      "K",
+      "temperature",
+      "humidity",
+      "ph",
+      "rainfall",
+      "fertility_score"
+    ],
+    "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\dnn\\multitask_dnn_v1.keras",
+    "artifact_exists": true,
+    "metrics": {
+      "test_crop_accuracy": 0.9758,
+      "test_fert_accuracy": 0.9303,
+      "test_def_accuracy": 0.9636,
+      "epochs_run": 45,
+      "train_time_s": 11.1
+    }
+  }
+]

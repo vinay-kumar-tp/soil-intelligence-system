@@ -1,0 +1,41 @@
+======================================================================
+PHASE 2B — XGBOOST PRODUCTION MODEL
+Task           : FERTILITY
+Best Iteration : 50
+Num Classes    : 3
+Num Features   : 14
+Train Time (s) : 0.1
+Tuned          : False
+======================================================================
+
+Model      : XGBoost_fertility
+Task       : fertility
+Split      : val
+Accuracy   : 0.9242
+Precision  : 0.797  (macro)
+Recall     : 0.797  (macro)
+F1         : 0.797  (macro)
+AUC-ROC    : 0.9379
+--------------------------------------------------
+Model      : XGBoost_fertility
+Task       : fertility
+Split      : test
+Accuracy   : 0.8788
+Precision  : 0.7383  (macro)
+Recall     : 0.8162  (macro)
+F1         : 0.7619  (macro)
+AUC-ROC    : 0.9037
+--------------------------------------------------
+
+TOP-10 FEATURE IMPORTANCE
+--------------------------------------------------
+  N                              0.2580
+  P                              0.1852
+  soil_quality_index             0.0960
+  Zn                             0.0706
+  organic_carbon                 0.0586
+  Mn                             0.0565
+  Cu                             0.0385
+  S                              0.0383
+  fertility_score                0.0376
+  K                              0.0351

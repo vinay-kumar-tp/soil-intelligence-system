@@ -1,0 +1,76 @@
+======================================================================
+PHASE 2A — CLASSICAL ML BASELINES
+Task       : FERTILITY
+Features   : 14  → ['N', 'P', 'K', 'ph', 'ec', 'organic_carbon', 'S', 'Zn', 'Fe', 'Cu', 'Mn', 'B', 'fertility_score', 'soil_quality_index']
+Train size : 616
+Val size   : 132
+Test size  : 132
+Classes    : 3
+======================================================================
+
+Model                       Val Acc  Test Acc   Test F1   Time(s)
+-----------------------------------------------------------------
+LogisticRegression           0.7348    0.7273    0.6076       0.0
+RandomForest                 0.9470    0.8939    0.6932       0.4
+SVM                          0.8333    0.8409    0.7065       0.0
+
+======================================================================
+DETAILED METRICS
+======================================================================
+
+Model      : LogisticRegression
+Task       : fertility
+Split      : val
+Accuracy   : 0.7348
+Precision  : 0.633  (macro)
+Recall     : 0.7192  (macro)
+F1         : 0.6159  (macro)
+AUC-ROC    : 0.8877
+--------------------------------------------------
+Model      : LogisticRegression
+Task       : fertility
+Split      : test
+Accuracy   : 0.7273
+Precision  : 0.6402  (macro)
+Recall     : 0.7146  (macro)
+F1         : 0.6076  (macro)
+AUC-ROC    : 0.8603
+--------------------------------------------------
+
+Model      : RandomForest
+Task       : fertility
+Split      : val
+Accuracy   : 0.947
+Precision  : 0.9649  (macro)
+Recall     : 0.7621  (macro)
+F1         : 0.8078  (macro)
+AUC-ROC    : 0.9595
+--------------------------------------------------
+Model      : RandomForest
+Task       : fertility
+Split      : test
+Accuracy   : 0.8939
+Precision  : 0.7685  (macro)
+Recall     : 0.6742  (macro)
+F1         : 0.6932  (macro)
+AUC-ROC    : 0.8744
+--------------------------------------------------
+
+Model      : SVM
+Task       : fertility
+Split      : val
+Accuracy   : 0.8333
+Precision  : 0.693  (macro)
+Recall     : 0.7848  (macro)
+F1         : 0.7094  (macro)
+AUC-ROC    : 0.9325
+--------------------------------------------------
+Model      : SVM
+Task       : fertility
+Split      : test
+Accuracy   : 0.8409
+Precision  : 0.6911  (macro)
+Recall     : 0.7389  (macro)
+F1         : 0.7065  (macro)
+AUC-ROC    : 0.8877
+--------------------------------------------------
