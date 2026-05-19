@@ -1,0 +1,120 @@
+================================================================================
+SOIL INTELLIGENCE PLATFORM - PRODUCTION HARDENING AUDIT
+REPORT: FINAL COMPLETED PROJECT STRUCTURE
+DATE: 2026-05-19
+STATUS: CONSOLIDATED & ENCRYPTED FOR FREEZE
+================================================================================
+
+The completed production-hardened project structure has been organized into
+a standard, highly professional enterprise layout. All dead code, duplicate
+baselines, obsolete metrics, and experimental notebooks are cleanly archived.
+
+soil_ai_system/
+│
+├── api/                             # FastAPI REST API Application
+│   ├── routes/                      # API Endpoint Routers (health, inference)
+│   ├── main.py                      # Application Factory & Startup Event Handlers
+│   ├── middleware.py                # CORS & Request Tracing Middleware
+│   └── metrics.py                   # Request Latency & Performance Gauges
+│
+├── app/                             # Premium Streamlit Thin-Client UI (formerly frontend/)
+│   ├── components/                  # Custom UI Cards, Charts, & Forms
+│   ├── services/                    # API Client Connectors (api_client.py)
+│   ├── visualizations/              # Dynamic Plotly & Folium Map Renderers
+│   └── app.py                       # Main Streamlit Dashboard Entry Point
+│
+├── datasets/                        # Consolidated Data Layer
+│   ├── raw/                         # Original Immutable Datasets (crop, fertility)
+│   ├── processed/                   # Unified Processed & Cleaned CSV Pipelines
+│   └── contextual/                  # Spatial, Climatic, & Environmental Data
+│
+├── preprocessing/                   # Modular Preprocessing & Feature Engineering
+│   ├── cleaner.py                   # Duplicates & Null Remediation Heuristics
+│   ├── feature_engineer.py          # Soil Quality & Fertility Index Generators
+│   ├── feature_store.py             # Feature Extraction & Pipeline Serialization
+│   ├── encoder.py                   # Label Encoding & Normalization Wrappers
+│   ├── scaler.py                    # MinMaxScaler Normalization
+│   └── validator.py                 # Strict Data Schema Pydantic Validation
+│
+├── training/                        # Machine Learning Pipelines (SVM & XGBoost)
+│   ├── data_loader.py               # Deterministic Split & Validation Samplers
+│   ├── evaluator.py                 # Out-of-Fold Cross-Validation Metrics
+│   ├── phase2a_baselines.py         # Multi-model Baseline Trainer (SVM)
+│   ├── phase2b_xgboost.py           # Gradient-Boosted XGBoost Pipeline
+│   ├── train_deficiency.py          # Nutrient Deficiency XGBoost Trainer
+│   └── train_all.py                 # Unified Master Training Script
+│
+├── inference/                       # Multi-model Prediction & Heuristics Orchestration
+│   ├── loaders.py                   # Thread-safe Lazy Model Loaders & Registry Cache
+│   ├── preprocessors.py             # Scaler Normalization & Superset Extraction
+│   ├── predictors.py                # Base Classifiers & Exact Decoding Alignments
+│   ├── engine.py                    # Unified Prediction Engine & Latency Tracker
+│   ├── explainers.py                # SHAP Feature Attribution Generators
+│   ├── decision_support.py          # Agronomic Risk & Suitability Heuristics
+│   └── validators.py                # Inference Request Boundaries (pH, coordinates)
+│
+├── explainability/                  # Explainable AI (XAI) Systems
+│   └── shap_engine.py               # SHAP Contrastive & Attributions Core
+│
+├── spatial/                         # Spatial Intelligence & GIS Boundary Heuristics
+│   ├── services/                    # Reverse-Geo Resolution & Spatial Cache
+│   ├── mock_regions.geojson         # Regional Boundaries Map
+│   └── india_admin.db               # Spatial Indexing Cache
+│
+├── weather/                         # Climatic Context & Live Weather Connectors
+│   ├── clients/                     # Async HTTP OpenWeatherMap Connectors
+│   ├── cache/                       # Weather TTL Cache Managers
+│   └── weather_context_engine.py    # Climatic Rule Context Extractor
+│
+├── knowledge_graph/                 # Connected Agronomic Semantic Graph
+│   └── graph_store.py               # Entity Relationship Resolution
+│
+├── reports/                         # Production Audits, Evaluations & XAI Charts
+│   ├── audits/                      # Preprocessing integrity, schema reconciliations
+│   ├── evaluations/                 # Model baseline reports, scientific defense briefs
+│   ├── explainability/              # Local/global SHAP attributions, contrastive maps
+│   ├── weather/                     # Weather validation outputs
+│   ├── spatial/                     # Spatial hierarchy, reverse-resolution logs
+│   └── final/                       # Freeze audits & cleanup validation reports
+│
+├── tests/                           # Automated Verification Suite
+│   ├── test_api.py                  # API Route Smoke & Schema Reject Checks
+│   ├── test_environment.py          # Environment, GPU, & Structure Smoke Checks
+│   ├── test_models.py               # Model Integrity & Binary Checks
+│   ├── test_phase6_intelligence.py  # Decision Support & Risk Constraints Checks
+│   ├── test_preprocessing.py        # Data Preprocessing & Validation Checks
+│   └── test_spatial_reasoning.py    # Spatial Hierarchy Resolution Checks
+│
+├── models/                          # Machine Learning Model Specifications
+│   ├── baseline.py                  # SVM Model Structures
+│   └── xgboost_model.py             # XGBoost Core Structures
+│
+├── cache/                           # Temporary Operations Cache (stale files removed)
+│
+├── configs/                         # Central Config Package (formerly config/)
+│   ├── __init__.py                  # Configs entry point
+│   ├── core.py                      # Features, labels, boundaries, and global thresholds
+│   ├── agro_climatic_rules.py       # Climatic thresholds and crops mapping
+│   ├── spatial_rules.py             # Regional modifier heuristics
+│   └── startup_checks.py            # Platform self-diagnostic scripts
+│
+├── utils/                           # Core Platform Utilities
+│   └── logger.py                    # Thread-safe platform logger
+│
+├── notebooks/                       # Pinned Production Jupyer Notebooks
+│   ├── final_inspection.ipynb       # Raw data quality audit
+│   ├── final_validation.ipynb       # Preprocessing validations
+│   ├── final_explainability.ipynb   # Model interpretability suite
+│   └── final_demo.ipynb             # Modeling execution demo
+│
+├── docs/                            # Deployment & Operation Handbooks
+│
+├── archive/                         # Isolated Historic Workspace (Deprecated Experiments)
+│   └── deprecated_experiments/      # Historic research, DL weights, prototype code
+│
+├── config.py                        # Backward-Compatibility proxy wrapper
+├── model_registry.json              # Versioned Model Binary Registrations
+├── run_backend.bat                  # REST API platform runner executable
+├── run_frontend.bat                 # Streamlit client runner executable
+└── requirements.txt                 # Pinned Production dependencies
+================================================================================

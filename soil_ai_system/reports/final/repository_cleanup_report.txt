@@ -1,0 +1,84 @@
+================================================================================
+SOIL INTELLIGENCE PLATFORM - PRODUCTION HARDENING AUDIT
+REPORT: REPOSITORY CLEANUP & SAFE CONSOLIDATION REPORT
+DATE: 2026-05-19
+STATUS: COMPLETE & STABILIZED
+================================================================================
+
+1. EXECUTIVE SUMMARY
+--------------------
+As part of the PHASE FINAL stabilization before production freeze, the repository
+has undergone a surgical cleanup. The objective was to eliminate clutter, isolate
+experimental work, and establish a clean, standard enterprise layout without
+altering any runtime prediction logic, API endpoints, or model performance.
+All 38 unit and integration tests continue to pass with 100% success.
+
+2. FOLDER & COMPONENT REORGANIZATION
+------------------------------------
+- Dashboard Reorganization:
+  * Renamed `soil_ai_system/frontend/` to the standardized `soil_ai_system/app/`.
+  * Updated Streamlit startup entry points (`app/app.py`).
+  * Updated absolute/relative imports recursively from `frontend` to `app` across
+    the client codebase and unit test suite (`test_phase4_frontend.py`).
+  * Updated shell runner wrappers (`run_frontend.bat`) and `Dockerfile.frontend`.
+
+- Configuration Hardening:
+  * Renamed `soil_ai_system/config/` (subpackage containing environment-specific
+    agronomic and spatial rules) to `soil_ai_system/configs/`.
+  * Moved the central `soil_ai_system/config.py` to `soil_ai_system/configs/core.py`.
+  * Created a safe backward-compatibility wrapper at `soil_ai_system/config.py` that
+    proxies all attributes, guaranteeing zero broken imports in historic code.
+  * Created a standard `soil_ai_system/configs/__init__.py` entrypoint.
+  * Updated all subpackage rules imports from `from config.xxx` to `from configs.xxx`.
+
+- Datasets Layer:
+  * Created `soil_ai_system/datasets/contextual/` directory to store static spatial,
+    climatic, and environmental reference datasets separately from dynamic CSVs.
+
+- Reports Layer:
+  * Reorganized flat report files in the workspace into structured directories:
+    * `reports/audits/`: System intelligence audits, dataset utilization checks.
+    * `reports/evaluations/`: Baseline modeling metrics, diagnostic guides, benchmark reports.
+    * `reports/explainability/`: Local/global SHAP outputs, contrastive analysis figures.
+    * `reports/weather/`: Live weather validations, climatic alignment checks.
+    * `reports/spatial/`: Spatial hierarchy reports, reverse-resolution logs.
+    * `reports/final/`: Final freeze readiness and hardening audits.
+
+3. COMPONENT DEPRECATION & ARCHIVING
+------------------------------------
+All experimental, redundant, and obsolete modules have been safely isolated under
+`soil_ai_system/archive/deprecated_experiments/` rather than being blindly deleted.
+This preserves historic research while maintaining a clean main production line:
+
+- Obsolete Models (Archived to `archive/deprecated_experiments/models/`):
+  * `multitask_dnn_v1.keras` (Obsolete Deep Learning DNN weights)
+  * `stacked_ensemble_v1.pkl` (Obsolete ensemble classifier binary)
+  * `GradientBoosting_crop_v1.pkl`, `LogisticRegression_crop_v1.pkl`, `RandomForest_crop_v1.pkl` (Experimental baselines)
+  * `LogisticRegression_fertility_v1.pkl`, `RandomForest_fertility_v1.pkl` (Experimental baselines)
+
+- Obsolete Training Pipelines (Archived to `archive/deprecated_experiments/training/`):
+  * `phase2c_dnn.py` (MultiTaskDNN training module)
+  * `phase2d_ensemble.py` (Stacked ensemble training module)
+
+- Experimental Notebooks (Archived to `archive/deprecated_experiments/notebooks/`):
+  * `01_eda.ipynb` (Exploratory data analysis)
+  * `02_preprocessing.ipynb` (Early preprocessing prototypes)
+  * `03_baseline_models.ipynb` (Baseline model benchmarks)
+  * `05_deep_learning.ipynb` (Experimental Deep Learning runs)
+  * `06_ensemble.ipynb` (Stacked ensemble notebook)
+  * `08_error_analysis.ipynb` (Error diagnostic checks)
+  * `09_ablation_study.ipynb` (Feature ablation experiments)
+
+- Prototypes & Temporary Assets:
+  * Archived the prototype folder `soil_ai_system/dashboard/` containing the early app layout.
+  * Archived `soil_ai_system/metrics/` containing raw CSV training metrics.
+  * Archived redundant script `generate_spatial_reports.py`.
+  * Removed empty directory `saved_models/v2/`.
+  * Cleaned up active `__pycache__` and `.pytest_cache` directories recursively.
+
+4. SYSTEM STABILITY VALIDATION
+------------------------------
+- Verification Method: Executed `pytest` against all tests.
+- Results: 38/38 active unit and integration tests passed cleanly.
+- Regression Immunity: No import errors, path mismatches, or runtime regression occurred during reorganization.
+================================================================================

@@ -29,4 +29,4 @@ ENV PYTHONPATH=/app/soil_ai_system
 EXPOSE 8000
 
 # Run startup checks directly and then start Uvicorn
-CMD ["sh", "-c", "python soil_ai_system/config/startup_checks.py && python -m uvicorn api.main:app --host 0.0.0.0 --port 8000"]
+CMD ["sh", "-c", "python soil_ai_system/configs/startup_checks.py && python -m uvicorn api.main:app --host 0.0.0.0 --port 8000"]

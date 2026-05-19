@@ -5,7 +5,7 @@ echo ==============================================
 cd %~dp0\..
 
 echo [1/3] Running Environment Diagnostics...
-.venv\Scripts\python.exe soil_ai_system\config\startup_checks.py
+.venv\Scripts\python.exe soil_ai_system\configs\startup_checks.py
 IF %ERRORLEVEL% NEQ 0 (
     echo [ERROR] Environment Validation Failed! See reports/startup_validation_report.txt
     pause

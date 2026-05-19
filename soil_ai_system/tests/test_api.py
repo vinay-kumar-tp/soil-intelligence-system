@@ -25,7 +25,7 @@ def test_health():
     Returns:
         None
     """
-    r = client.get("/health")
+    r = client.get("/api/v1/health")
     assert r.status_code == 200
     assert r.json()["status"] == "healthy"
 
@@ -57,7 +57,7 @@ def test_predict_valid():
         "state": "Tamil Nadu",
         "season": "kharif",
     }
-    r = client.post("/predict", json=payload)
+    r = client.post("/api/v1/predict", json=payload)
     assert r.status_code == 200
     data = r.json()
     assert "crop" in data
@@ -84,5 +84,5 @@ def test_predict_invalid_ph():
         "rainfall": 800,
         "temperature": 28,
     }
-    r = client.post("/predict", json=payload)
+    r = client.post("/api/v1/predict", json=payload)
     assert r.status_code == 422

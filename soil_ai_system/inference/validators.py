@@ -18,7 +18,7 @@ class SoilInferenceRequest(BaseModel):
     K: float = Field(..., description="Potassium content ratio")
     temperature: float = Field(..., description="Temperature in Celsius")
     humidity: float = Field(..., description="Relative Humidity percentage (0-100)")
-    ph: float = Field(..., description="Soil pH value (1-14)")
+    ph: float = Field(..., ge=0.0, le=14.0, description="Soil pH value (1-14)")
     rainfall: float = Field(..., description="Rainfall in mm")
     
     # Optional context features

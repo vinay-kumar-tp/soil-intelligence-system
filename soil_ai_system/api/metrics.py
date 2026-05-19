@@ -2,7 +2,7 @@ import json
 import os
 import time
 from pathlib import Path
-from config.environment import LOGS_DIR
+from configs.environment import LOGS_DIR
 import threading
 
 METRICS_FILE = LOGS_DIR / "metrics.json"

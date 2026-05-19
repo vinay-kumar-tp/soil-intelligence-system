@@ -16,7 +16,7 @@
       "fertility_score"
     ],
     "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\crop_pipeline\\GradientBoosting_crop_v1.pkl",
-    "artifact_exists": true,
+    "artifact_exists": false,
     "metrics": {
       "val_accuracy": 0.997,
       "test_accuracy": 0.9879,
@@ -43,7 +43,7 @@
       "fertility_score"
     ],
     "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\crop_pipeline\\LogisticRegression_crop_v1.pkl",
-    "artifact_exists": true,
+    "artifact_exists": false,
     "metrics": {
       "val_accuracy": 0.9545,
       "test_accuracy": 0.9455,
@@ -70,7 +70,7 @@
       "fertility_score"
     ],
     "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\crop_pipeline\\RandomForest_crop_v1.pkl",
-    "artifact_exists": true,
+    "artifact_exists": false,
     "metrics": {
       "val_accuracy": 1.0,
       "test_accuracy": 0.9939,
@@ -130,7 +130,7 @@
       "soil_quality_index"
     ],
     "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\fertility_pipeline\\LogisticRegression_fertility_v1.pkl",
-    "artifact_exists": true,
+    "artifact_exists": false,
     "metrics": {
       "val_accuracy": 0.7348,
       "test_accuracy": 0.7273,
@@ -163,7 +163,7 @@
       "soil_quality_index"
     ],
     "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\fertility_pipeline\\RandomForest_fertility_v1.pkl",
-    "artifact_exists": true,
+    "artifact_exists": false,
     "metrics": {
       "val_accuracy": 0.947,
       "test_accuracy": 0.8939,
@@ -307,7 +307,7 @@
       "fertility_score"
     ],
     "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\ensemble\\stacked_ensemble_v1.pkl",
-    "artifact_exists": true,
+    "artifact_exists": false,
     "metrics": {
       "test_accuracy": 0.997,
       "test_f1_macro": 0.997,
@@ -331,7 +331,7 @@
       "fertility_score"
     ],
     "artifact_path": "C:\\Users\\vinay\\PROJECTS\\soil-intelligence-system\\soil_ai_system\\saved_models\\dnn\\multitask_dnn_v1.keras",
-    "artifact_exists": true,
+    "artifact_exists": false,
     "metrics": {
       "test_crop_accuracy": 0.9758,
       "test_fert_accuracy": 0.9303,

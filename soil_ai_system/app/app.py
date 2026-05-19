@@ -7,17 +7,17 @@ import time
 _PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
-from frontend.services.api_client import get_system_health, predict_soil
-from frontend.visualizations.charts import plot_confidence_gauge, plot_feature_importance
-from frontend.components.cards import render_recommendation_card, render_contrastive_panel
-from frontend.components.decision_cards import (
+from services.api_client import get_system_health, predict_soil
+from visualizations.charts import plot_confidence_gauge, plot_feature_importance
+from components.cards import render_recommendation_card, render_contrastive_panel
+from components.decision_cards import (
     render_confidence_indicator,
     render_hybrid_intelligence_score_gauge,
     render_agronomic_narrative,
     render_prioritized_recommendations,
     render_comparative_crops
 )
-from frontend.components.map_view import render_interactive_map, render_hierarchy_panel
+from components.map_view import render_interactive_map, render_hierarchy_panel
 
 st.set_page_config(
     page_title="AgroSphere - Precision Agronomic Platform",
@@ -245,7 +245,7 @@ def page_predictive_analysis():
                     st.success("✅ Real-time environmental context fetched and cached successfully!")
                     
             if 'weather_context' in st.session_state:
-                from frontend.components.weather_cards import render_weather_dashboard
+                from components.weather_cards import render_weather_dashboard
                 render_weather_dashboard(st.session_state['weather_context'])
             
         st.markdown("<br>", unsafe_allow_html=True)
@@ -334,7 +334,7 @@ def page_predictive_analysis():
                     w_intel = result.get("weather_intelligence", {})
                     if w_intel and w_intel.get("status") in ["success", "fallback"]:
                         st.markdown("### 🌍 Real-Time Environmental Sensors Report")
-                        from frontend.components.weather_cards import render_weather_dashboard
+                        from components.weather_cards import render_weather_dashboard
                         render_weather_dashboard(w_intel)
                         st.markdown("<br>", unsafe_allow_html=True)
                         
@@ -342,7 +342,7 @@ def page_predictive_analysis():
                     a_intel = result.get("adaptive_intelligence", {})
                     if a_intel and "intelligence_score" in a_intel:
                         st.markdown("### 🕸️ Connected Agricultural Adaptive Intelligence")
-                        from frontend.components.adaptive_intelligence_cards import render_adaptive_dashboard
+                        from components.adaptive_intelligence_cards import render_adaptive_dashboard
                         render_adaptive_dashboard(a_intel)
                         st.markdown("<br>", unsafe_allow_html=True)
 
@@ -364,7 +364,7 @@ def render_sidebar():
         return page
 
 def page_diagnostics():
-    from frontend.services.api_client import get_system_health, get_system_metrics
+    from services.api_client import get_system_health, get_system_metrics
     st.markdown("<p class='main-header'>Operational Observability</p>", unsafe_allow_html=True)
     st.markdown("<p class='sub-header'>System metrics, latency tracking, and inference analytics.</p>", unsafe_allow_html=True)
     

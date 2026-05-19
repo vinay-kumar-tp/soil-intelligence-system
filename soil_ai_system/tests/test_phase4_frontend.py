@@ -9,7 +9,7 @@ _PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
 
-from frontend.services.api_client import get_system_health, predict_soil
+from app.services.api_client import get_system_health, predict_soil
 
 def generate_report():
     report_lines = [
@@ -21,7 +21,7 @@ def generate_report():
     
     # 1. Structural Validation
     report_lines.append("[TEST 1] Validating Thin Client Architecture...")
-    app_path = _PROJECT_ROOT / "frontend" / "app.py"
+    app_path = _PROJECT_ROOT / "app" / "app.py"
     if app_path.exists():
         content = app_path.read_text(encoding="utf-8")
         if "xgboost" in content.lower() or "joblib.load" in content:
@@ -35,7 +35,7 @@ def generate_report():
     # 2. Mocking API Client Success
     try:
         report_lines.append("\n[TEST 2] Testing API Client Integrations...")
-        with patch("frontend.services.api_client.requests.get") as mock_get:
+        with patch("app.services.api_client.requests.get") as mock_get:
             mock_get.return_value.status_code = 200
             mock_get.return_value.json.return_value = {"status": "healthy"}
             health = get_system_health()
@@ -50,7 +50,7 @@ def generate_report():
     try:
         report_lines.append("\n[TEST 3] Testing Failure Resilience & Timeouts...")
         import requests
-        with patch("frontend.services.api_client.requests.post") as mock_post:
+        with patch("app.services.api_client.requests.post") as mock_post:
             mock_post.side_effect = requests.exceptions.Timeout("Connection timed out")
             res = predict_soil({"N": 1})
             if res.get("status") == "error" and "timed out" in res.get("message", ""):

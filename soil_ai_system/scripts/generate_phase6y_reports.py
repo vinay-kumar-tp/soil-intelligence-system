@@ -1,6 +1,6 @@
 import os
 from spatial.loaders.hierarchy_loader import get_all_states, get_districts, get_taluks, get_hoblis, get_villages
-from config.agro_climatic_rules import DISTRICT_AGRO_CLIMATIC_MAP
+from configs.agro_climatic_rules import DISTRICT_AGRO_CLIMATIC_MAP
 
 def generate_reports():
     reports_dir = "reports"

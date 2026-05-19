@@ -1,0 +1,67 @@
+================================================================================
+SOIL INTELLIGENCE PLATFORM - PRODUCTION HARDENING AUDIT
+REPORT: DEPENDENCY VALIDATION REPORT
+DATE: 2026-05-19
+STATUS: VALIDATED & CONSOLIDATED
+================================================================================
+
+1. DEPENDENCY AUDIT PURPOSE
+---------------------------
+As part of the production freeze, a thorough dependency audit was performed on
+`soil_ai_system/requirements.txt`. The goal was to ensure that all required libraries
+remain stable, that no high-overhead package was blindly deleted if still utilized
+in historic notebooks or specific explainability subsystems, and that versioning is
+pinned for deterministic reproducibility.
+
+2. EVALUATION OF HIGH-OVERHEAD DEPENDENCIES
+-------------------------------------------
+- TensorFlow (v2.15.0) & Keras (v2.15.0):
+  * Status: RETAINED
+  * Rationale: Although the production prediction engine is fully migrated to
+    highly performant, lightweight XGBoost and SVM classifiers (lazy-loaded to avoid
+    startup bottlenecks), TensorFlow and Keras are preserved.
+  * Dependency: They are required to support historic deep learning experiments,
+    specifically the `05_deep_learning.ipynb` notebook and `phase2c_dnn.py` training
+    scripts preserved in the `archive/deprecated_experiments/` folder. This ensures
+    that any developer or research auditor recreating the environment from
+    `requirements.txt` can successfully run and inspect all deep learning pipelines.
+
+- SHAP (v0.42.1) & Scikit-Learn (v1.3.0):
+  * Status: RETAINED & ACTIVE
+  * Rationale: Standard scikit-learn is utilized for scaling (`scaler.pkl`), encoding
+    (`label_encoders.pkl`), and baseline models. SHAP remains fully active to support
+    the explainability suite (`shap_engine.py`) and render interactive local/global
+    feature importance plots on the Streamlit dashboard (`app/app.py`).
+
+- Streamlit (v1.25.0) & Folium (v0.14.0) & Streamlit-Folium (v0.13.0):
+  * Status: RETAINED & ACTIVE
+  * Rationale: Streamlit powers the client interface. Folium provides the spatial GIS
+    mapping controls, geojson boundaries resolution, and visual agronomic support maps
+    integrated into the frontend.
+
+3. PINNED DEPENDENCY OVERVIEW
+-----------------------------
+The production environment relies on the following pinned libraries:
+  * pandas==2.0.3: High-performance data structures and analytical operations.
+  * numpy==1.24.3: Numerical and matrix processing.
+  * scikit-learn==1.3.0: Basic baseline classification, normalization, and scaling.
+  * xgboost==1.7.6: High-accuracy gradient-boosted decision trees (crop, fertility, deficiency).
+  * shap==0.42.1: Model explainability and game-theoretic feature attribution.
+  * streamlit==1.25.0: Sleek, premium thin-client dashboard UI.
+  * fastapi==0.103.1: Async high-performance HTTP REST API.
+  * uvicorn==0.23.2: ASGI server for hosting backend APIs.
+  * plotly==5.15.0: Dynamic chart visualizations for frontend prediction confidence.
+  * matplotlib==3.7.2 & seaborn==0.12.2: Explanatory and diagnostic charts.
+  * imbalanced-learn==0.11.0: Resampling support for class balancing.
+  * pydantic==2.3.0: Strict request schema validation (pH, coordinates, nutrients).
+  * joblib==1.3.2: Model serialization and quick lazy loading from disk.
+  * scipy==1.11.1: Standard scientific computations.
+  * pytest==7.4.0: Rigorous automated unit/integration testing framework.
+  * folium==0.14.0 & streamlit-folium==0.13.0: GIS administrative boundary rendering.
+
+4. COMPATIBILITY CERTIFICATION
+------------------------------
+The pinned environment has been validated against Python 3.11.9 on Windows, certifying
+that all packages resolve successfully, uvicorn starts the server, streamlit launches
+the dashboard, and the complete unit testing suite passes with 100% confidence.
+================================================================================

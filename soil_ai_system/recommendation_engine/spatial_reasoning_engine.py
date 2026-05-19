@@ -4,8 +4,8 @@ Interprets location context, adjusts recommendation confidence, adds environment
 compatibility signals, adds regional crop suitability hints, and generates contextual narratives.
 """
 from typing import Dict, Any, List
-from config.spatial_rules import CROP_SUITABILITY_MODIFIERS, IRRIGATION_DEPENDENCE
-from config.agro_climatic_rules import DISTRICT_AGRO_CLIMATIC_MAP, ZONE_MODIFIERS
+from configs.spatial_rules import CROP_SUITABILITY_MODIFIERS, IRRIGATION_DEPENDENCE
+from configs.agro_climatic_rules import DISTRICT_AGRO_CLIMATIC_MAP, ZONE_MODIFIERS
 
 def apply_spatial_reasoning(
     inputs: Dict[str, Any],
