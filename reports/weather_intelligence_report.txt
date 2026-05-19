@@ -1,0 +1,50 @@
+========================================================================
+PHASE 6Z — LIVE WEATHER INTELLIGENCE & ENVIRONMENTAL CONTEXT ORCHESTRATION
+========================================================================
+TECHNICAL INTEGRATION & ARCHITECTURE REPORT
+
+1. EXECUTIVE SUMMARY
+--------------------
+To establish an enterprise-grade "live environmental agricultural intelligence" 
+platform, we integrated a real-time Weather Intelligence Layer. This layer
+augments core Machine Learning crop predictions with physical environmental realism,
+short-term forecasts, and localized risk profiles, without modifying the underlying
+trained model weights.
+
+2. API & CLIENT SELECTION
+-------------------------
+* Target Service: Open-Meteo API (https://open-meteo.com/)
+* Justification: Stable, high availability, free for research/commercial scale,
+  no API keys required, lightweight payload structures, and rich forecast endpoints.
+* Module: soil_ai_system/weather/clients/open_meteo.py
+* Resilience Rules:
+  - Strict 6-second connection timeouts.
+  - Proxy-agnostic requests (trust_env = False) to bypass enterprise network filters.
+  - WMO Code mapping translating numeric weather status (e.g. Code 63 -> Moderate rain)
+    into descriptive agronomic labels.
+
+3. CACHING STRATEGY (TTL-BASED GRID CACHE)
+------------------------------------------
+* Module: soil_ai_system/weather/cache/weather_cache.py
+* Key Structure: Latitude and Longitude values are rounded to exactly 2 decimal places.
+  - This aggregates nearby clicks (approx. ~1.1km grid accuracy).
+  - Prevents micro-coordinate changes from triggering duplicated API calls.
+* Time-To-Live (TTL): 30 minutes (1800 seconds).
+  - Agricultural ambient variables are slowly evolving. Caching for 30 minutes
+    maintains physical precision while minimizing network latency and API spam.
+* Graceful Eviction: Automatic timestamp checks invalidate outdated cache records.
+
+4. COORDINATE VALIDATORS
+------------------------
+* Module: soil_ai_system/weather/validators/coordinates.py
+* Validates that latitudes are physically bounded between [-90.0, 90.0]
+  and longitudes are physically bounded between [-180.0, 180.0].
+* Protects the request pipeline from garbage coordinates or format errors.
+
+5. INTEGRATION IN UNIFIED ENGINE
+--------------------------------
+* Module: soil_ai_system/inference/engine.py
+* The API payload accepts optional `latitude`, `longitude`, and pre-cached `weather_context`.
+* Live weather fetched only if coordinates are explicitly passed. If the API is
+  unreachable, the engine automatically catches the warning, marks the status
+  as "fallback", and executes standard soil prediction cleanly (Graceful Degradation).

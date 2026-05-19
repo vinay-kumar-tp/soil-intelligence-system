@@ -1,0 +1,8 @@
+MAP INTEGRATION REPORT
+======================
+
+Stack: OpenStreetMap + Leaflet (folium, streamlit-folium)
+Feature: Click-to-select map regions.
+Integration: The map renders GeoJSON data representing district/taluk polygons.
+Behavior: Clicks resolve into 'state', 'district', 'taluk', 'hobli', 'village' variables.
+Status: Streamlit frontend updated successfully with `st_folium` component.

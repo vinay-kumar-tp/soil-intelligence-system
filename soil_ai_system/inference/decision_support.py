@@ -8,93 +8,116 @@ from typing import Any, Dict, List
 import numpy as np
 
 # Scientific crop requirements database
+# Scientific crop requirements database with seasonal and lifecycle parameters
 CROP_AGRONOMIC_PROFILES = {
     "rice": {
         "opt_rain": (1200, 3000), "opt_temp": (20, 38), "opt_hum": (70, 95), "opt_ph": (5.0, 7.0),
+        "seasons": ["kharif"], "duration": "seasonal",
         "desc": "Water-intensive cereal crop requiring high moisture and swampy or clay loam conditions."
     },
     "maize": {
         "opt_rain": (500, 1500), "opt_temp": (18, 32), "opt_hum": (55, 80), "opt_ph": (5.5, 7.5),
+        "seasons": ["kharif", "rabi"], "duration": "seasonal",
         "desc": "Widely adaptable crop requiring warm temperatures and well-drained loamy soils."
     },
     "chickpea": {
         "opt_rain": (300, 700), "opt_temp": (15, 28), "opt_hum": (30, 60), "opt_ph": (6.0, 8.0),
+        "seasons": ["rabi"], "duration": "seasonal",
         "desc": "Dry-climate legume crop highly susceptible to waterlogging but excellent for nitrogen fixation."
     },
     "kidneybeans": {
         "opt_rain": (400, 1000), "opt_temp": (15, 25), "opt_hum": (40, 70), "opt_ph": (5.5, 6.5),
+        "seasons": ["rabi"], "duration": "seasonal",
         "desc": "Nutrient-rich legume crop preferring moderate rain and slightly acidic to neutral well-drained soil."
     },
     "pigeonpeas": {
         "opt_rain": (600, 1200), "opt_temp": (18, 35), "opt_hum": (45, 80), "opt_ph": (5.0, 7.5),
+        "seasons": ["kharif"], "duration": "seasonal",
         "desc": "Drought-resistant pulse crop highly suitable for semi-arid tropics and intercropping."
     },
     "mothbeans": {
         "opt_rain": (200, 500), "opt_temp": (25, 40), "opt_hum": (30, 60), "opt_ph": (6.0, 7.5),
+        "seasons": ["kharif"], "duration": "seasonal",
         "desc": "Extremely drought-hardy legume suitable for arid and sandy soils."
     },
     "mungbean": {
         "opt_rain": (400, 900), "opt_temp": (20, 35), "opt_hum": (40, 70), "opt_ph": (6.0, 7.5),
+        "seasons": ["summer", "kharif"], "duration": "seasonal",
         "desc": "Short-duration pulse crop that performs well in warm, humid climates with moderate soils."
     },
     "blackgram": {
         "opt_rain": (600, 1000), "opt_temp": (25, 35), "opt_hum": (45, 80), "opt_ph": (6.0, 7.5),
+        "seasons": ["kharif", "rabi"], "duration": "seasonal",
         "desc": "Highly nutritious pulse crop requiring warm weather and well-drained clayey soils."
     },
     "lentil": {
         "opt_rain": (350, 700), "opt_temp": (10, 25), "opt_hum": (30, 60), "opt_ph": (6.0, 8.0),
+        "seasons": ["rabi"], "duration": "seasonal",
         "desc": "Cool-season pulse crop highly sensitive to high humidity and water logging."
     },
     "pomegranate": {
         "opt_rain": (500, 1200), "opt_temp": (15, 35), "opt_hum": (30, 60), "opt_ph": (5.5, 7.5),
+        "seasons": ["perennial"], "duration": "perennial",
         "desc": "Resilient fruit crop suitable for semi-arid climates, preferring calcareous well-drained soils."
     },
     "banana": {
         "opt_rain": (1500, 3000), "opt_temp": (20, 35), "opt_hum": (65, 90), "opt_ph": (5.5, 8.0),
+        "seasons": ["perennial"], "duration": "perennial",
         "desc": "Tropical fruit crop requiring constant warm moisture, rich organic matter, and high potassium."
     },
     "mango": {
         "opt_rain": (750, 1500), "opt_temp": (20, 36), "opt_hum": (40, 75), "opt_ph": (5.5, 7.0),
-        "desc": "Perennial deep-rooted fruit tree requiring dry dry-periods for fruit development."
+        "seasons": ["perennial"], "duration": "perennial",
+        "desc": "Perennial deep-rooted fruit tree requiring dry periods for fruit development."
     },
     "grapes": {
         "opt_rain": (400, 1000), "opt_temp": (15, 32), "opt_hum": (30, 65), "opt_ph": (6.0, 7.5),
+        "seasons": ["perennial"], "duration": "perennial",
         "desc": "Vine crop requiring good drainage, warm dry summers, and sensitive to excessive moisture."
     },
     "watermelon": {
         "opt_rain": (300, 800), "opt_temp": (22, 35), "opt_hum": (35, 65), "opt_ph": (5.5, 7.0),
+        "seasons": ["summer"], "duration": "seasonal",
         "desc": "Warm-season vine requiring highly sandy loam soils, low humidity, and high solar radiation."
     },
     "muskmelon": {
         "opt_rain": (300, 800), "opt_temp": (20, 35), "opt_hum": (35, 65), "opt_ph": (5.5, 7.0),
+        "seasons": ["summer"], "duration": "seasonal",
         "desc": "Slightly drought-hardy fruit crop requiring sandy soils, heat, and minimal humidity during harvest."
     },
     "apple": {
         "opt_rain": (600, 1500), "opt_temp": (5, 25), "opt_hum": (40, 70), "opt_ph": (5.5, 6.8),
+        "seasons": ["perennial"], "duration": "perennial",
         "desc": "Temperate fruit crop requiring chilling hours and moderately acidic, nutrient-dense soils."
     },
     "orange": {
         "opt_rain": (800, 1600), "opt_temp": (15, 32), "opt_hum": (45, 80), "opt_ph": (5.5, 7.5),
+        "seasons": ["perennial"], "duration": "perennial",
         "desc": "Citrus crop requiring uniform irrigation, good soil aeration, and highly vulnerable to frost."
     },
     "papaya": {
         "opt_rain": (1000, 2000), "opt_temp": (22, 35), "opt_hum": (60, 85), "opt_ph": (6.0, 7.0),
+        "seasons": ["perennial"], "duration": "perennial",
         "desc": "Herbaceous tropical plant requiring rich organic soils and extremely sensitive to water logging."
     },
     "coconut": {
         "opt_rain": (1000, 2500), "opt_temp": (20, 35), "opt_hum": (60, 90), "opt_ph": (5.0, 8.0),
+        "seasons": ["perennial"], "duration": "perennial",
         "desc": "Resilient coastal crop requiring steady warm sun, highly sand-tolerant, and thrives in high humidity."
     },
     "cotton": {
         "opt_rain": (500, 1200), "opt_temp": (22, 35), "opt_hum": (50, 80), "opt_ph": (5.5, 8.5),
+        "seasons": ["kharif"], "duration": "seasonal",
         "desc": "Cash crop requiring dry sunny harvest periods and deep, moisture-retentive black cotton soils."
     },
     "jute": {
         "opt_rain": (1200, 2500), "opt_temp": (24, 38), "opt_hum": (70, 95), "opt_ph": (6.0, 7.5),
+        "seasons": ["kharif"], "duration": "seasonal",
         "desc": "Fibre crop requiring hot, humid tropical climates and deep rich alluvial soils."
     },
     "coffee": {
         "opt_rain": (1000, 2200), "opt_temp": (15, 28), "opt_hum": (60, 85), "opt_ph": (5.0, 6.5),
+        "seasons": ["perennial"], "duration": "perennial",
         "desc": "Shade-loving plantation crop requiring cool humid highlands and slightly acidic, organic-rich soil."
     }
 }
@@ -132,7 +155,7 @@ def analyze_crop_suitability(crop: str, inputs: Dict[str, Any]) -> Dict[str, Any
     elif rain < opt_rain[0]:
         limiting_factors.append(f"Insufficient rainfall ({rain:.1f} mm vs ideal {opt_rain[0]} mm).")
         risks.append("Moisture stress risk requires crop irrigation support.")
-        score_mod -= 15
+        score_mod -= 20
     else:
         risks.append("High rainfall risk could lead to waterlogging or root damage.")
         score_mod -= 10
@@ -146,7 +169,7 @@ def analyze_crop_suitability(crop: str, inputs: Dict[str, Any]) -> Dict[str, Any
     else:
         limiting_factors.append(f"Temperature exposure ({temp:.1f}°C) is outside optimal {opt_temp[0]}-{opt_temp[1]}°C.")
         risks.append("Thermal stress may affect yield or flowering rates.")
-        score_mod -= 10
+        score_mod -= 15
 
     # 3. Humidity check
     hum = inputs.get("humidity", 50)
@@ -155,7 +178,7 @@ def analyze_crop_suitability(crop: str, inputs: Dict[str, Any]) -> Dict[str, Any
         advantages.append(f"Optimal atmospheric humidity ({hum:.1f}%) regulates transpiration.")
         score_mod += 5
     else:
-        risks.append(f"Suboptimal humidity ({hum:.1f}%) might promote fungal diseases or high transpiration.")
+        risks.append(f"Suboptimal humidity ({hum:.1f}%) might promote fungal diseases.")
         score_mod -= 5
 
     # 4. pH check
@@ -167,7 +190,7 @@ def analyze_crop_suitability(crop: str, inputs: Dict[str, Any]) -> Dict[str, Any
     else:
         limiting_factors.append(f"Soil pH {ph:.1f} is outside crop's ideal range ({opt_ph[0]}-{opt_ph[1]}).")
         risks.append("Altered pH reduces bioavailability of critical soil micronutrients.")
-        score_mod -= 15
+        score_mod -= 20
 
     # 5. Core nutrient deficiencies
     n = inputs.get("N", 0)
@@ -175,15 +198,38 @@ def analyze_crop_suitability(crop: str, inputs: Dict[str, Any]) -> Dict[str, Any
     k = inputs.get("K", 0)
     
     if n < NUTRIENT_THRESHOLDS["N"]["low"]:
-        risks.append("Low nitrogen will restrict vegetative growth and foliage development.")
+        risks.append("Low nitrogen will restrict vegetative growth.")
         score_mod -= 5
     if p < NUTRIENT_THRESHOLDS["P"]["low"]:
         risks.append("Low phosphorus blocks robust root establishment.")
         score_mod -= 5
     if k < NUTRIENT_THRESHOLDS["K"]["low"]:
-        risks.append("Low potassium reduces natural drought and pest resistance.")
+        risks.append("Low potassium reduces natural drought resistance.")
         score_mod -= 5
         
+    # 6. Season and Duration Check (PHYSICS OVERRULE)
+    season = inputs.get("seasonal_context", "").lower()
+    crop_seasons = profile.get("seasons", [])
+    duration = profile.get("duration", "seasonal")
+    
+    if season and crop_seasons:
+        if season in crop_seasons:
+            advantages.append(f"Aligned with seasonal context ({season.capitalize()} crop).")
+            score_mod += 15
+        elif "perennial" in crop_seasons:
+            # Perennial crops are long-term, so we check if there's high stress or rain-fed limits
+            if rain < 500 and inputs.get("irrigation_type", "").lower() == "rain-fed":
+                limiting_factors.append(f"Perennial {crop.capitalize()} requires long-term water, but rain-fed rain is insufficient.")
+                risks.append("Severe long-term soil moisture depletion risk.")
+                score_mod -= 25
+            else:
+                advantages.append("Perennial crop with stable year-round growth profile.")
+                score_mod += 5
+        else:
+            limiting_factors.append(f"Mismatched season (sowing {crop.capitalize()} in {season.capitalize()} is non-traditional).")
+            risks.append(f"Sowing {crop.capitalize()} in {season.capitalize()} leads to cycle mismatch.")
+            score_mod -= 30
+            
     if not advantages:
         advantages.append("Soil holds baseline compatibility.")
     if not risks:
@@ -206,49 +252,85 @@ def generate_decision_support(
 ) -> Dict[str, Any]:
     """Orchestrates Phase 6 Agronomic Reasoning and Decision Intelligence on top of standard predictions."""
     
-    # --- 6A: Confidence-Aware Intelligence ---
+    # Calculate suitability for all known crops to find both best and worst
+    all_probs = crop_res.get("all_probabilities", {})
+    all_crop_suitability = []
+    
+    for name in CROP_AGRONOMIC_PROFILES.keys():
+        prob = all_probs.get(name, 0.0)
+        suit = analyze_crop_suitability(name, inputs)
+        
+        # Physics-based suitability score calculation:
+        # Starts at 70%, adjusted by score_mod (pH, Rain, Temp, Season, Soil type)
+        phys_score = max(5, min(99, int(70 + suit["score_mod"])))
+        
+        # Truly Hybrid Suitability Score:
+        if prob > 0.05:
+            # Merge ML probability (up to 40%) with environment physics (up to 60%)
+            suitability_score = max(5, min(99, int(prob * 40 + phys_score * 0.60)))
+        else:
+            # Allows highly suitable seasonal alternatives to bubble up even if the ML model predicted 0%
+            suitability_score = max(5, min(95, int(phys_score * 0.85)))
+            
+        all_crop_suitability.append({
+            "crop": name.capitalize(),
+            "suitability_score": suitability_score,
+            "description": CROP_AGRONOMIC_PROFILES[name]["desc"],
+            "advantages": suit["advantages"],
+            "risks": suit["risks"],
+            "limiting_factors": suit["limiting_factors"],
+            "raw_suit": suit
+        })
+        
+    # Find suitability score of primary predicted crop
+    primary_crop = crop_res.get("prediction", "Unknown").lower()
+    primary_suitability_score = 50
+    for item in all_crop_suitability:
+        if item["crop"].lower() == primary_crop:
+            primary_suitability_score = item["suitability_score"]
+            break
+            
+    # --- 6A: Confidence-Aware Intelligence (Physics Overrule Check) ---
     base_confidence = crop_res.get("confidence", 0.5)
-    if base_confidence >= 0.75:
+    if primary_suitability_score < 40:
+        conf_tier = "CRITICAL MISMATCH"
+        conf_message = f"WARNING: The ML model suggested {crop_res['prediction'].capitalize()}, but environmental physics show a CRITICAL MISMATCH (Suitability: {primary_suitability_score}%). We highly recommend sowing seasonal winter/Rabi crops instead."
+    elif base_confidence >= 0.75 and primary_suitability_score >= 70:
         conf_tier = "HIGH CONFIDENCE"
-        conf_message = f"{crop_res['prediction'].capitalize()} strongly matches the current environmental and soil conditions."
-    elif base_confidence >= 0.40:
+        conf_message = f"{crop_res['prediction'].capitalize()} strongly matches both neural predictions and seasonal environment physics."
+    elif base_confidence >= 0.40 and primary_suitability_score >= 50:
         conf_tier = "MODERATE CONFIDENCE"
-        conf_message = f"The field partially supports {crop_res['prediction']} cultivation, but some conditions may reduce yield stability."
+        conf_message = f"The field partially supports {crop_res['prediction']} cultivation, but seasonal factors suggest some yield volatility."
     else:
         conf_tier = "LOW CONFIDENCE"
         conf_message = f"Current field conditions are weakly aligned with {crop_res['prediction']} cultivation. Exercise caution."
 
     # --- 6B: Top-K Comparative Crop Reasoning ---
-    all_probs = crop_res.get("all_probabilities", {})
-    top_3_crops = []
-    if all_probs:
-        # Sort crop probabilities descending
-        sorted_crops = sorted(all_probs.items(), key=lambda x: x[1], reverse=True)[:3]
-        for name, prob in sorted_crops:
-            suit = analyze_crop_suitability(name, inputs)
-            # Suitability score is based on model probability scaled to 100, combined with environmental checks
-            suitability_score = max(5, min(99, int(prob * 100 + suit["score_mod"])))
-            
-            top_3_crops.append({
-                "crop": name.capitalize(),
-                "probability": float(prob),
-                "suitability_score": suitability_score,
-                "description": CROP_AGRONOMIC_PROFILES.get(name, {}).get("desc", "Agronomic details pending local classification."),
-                "advantages": suit["advantages"],
-                "risks": suit["risks"],
-                "limiting_factors": suit["limiting_factors"]
+    # Top 3 most suitable crops (sorted descending by suitability score)
+    sorted_suitable = sorted(all_crop_suitability, key=lambda x: x["suitability_score"], reverse=True)
+    top_3_crops = sorted_suitable[:3]
+    
+    # Crops to Avoid (sorted ascending by suitability score, excluding the top 3)
+    avoid_candidates = sorted(all_crop_suitability, key=lambda x: x["suitability_score"])
+    crops_to_avoid = []
+    for item in avoid_candidates:
+        if item["crop"] not in [c["crop"] for c in top_3_crops]:
+            # Generate a scientific reason why it must be avoided
+            limits = item["limiting_factors"]
+            risks = item["risks"]
+            reason = "Mismatched soil/climate parameters."
+            if limits and limits[0] != "No critical climatic limits observed.":
+                reason = f"{limits[0]} {risks[0] if risks else ''}"
+            elif risks and risks[0] != "No critical agronomic risks predicted.":
+                reason = risks[0]
+                
+            crops_to_avoid.append({
+                "crop": item["crop"],
+                "suitability_score": item["suitability_score"],
+                "reason": reason
             })
-    else:
-        # Fallback if probability array is missing
-        top_3_crops.append({
-            "crop": crop_res.get("prediction", "Unknown").capitalize(),
-            "probability": base_confidence,
-            "suitability_score": int(base_confidence * 100),
-            "description": "Primary recommended crop.",
-            "advantages": ["Standard climate alignment."],
-            "risks": ["Standard monitoring recommended."],
-            "limiting_factors": ["None."]
-        })
+            if len(crops_to_avoid) >= 3: # get worst 3
+                break
 
     # --- 6C: Agronomic Narrative Engine ---
     primary_crop = crop_res.get("prediction", "Unknown").lower()
@@ -380,6 +462,7 @@ def generate_decision_support(
             "message": conf_message
         },
         "top_k_crops": top_3_crops,
+        "crops_to_avoid": crops_to_avoid,
         "narrative": narrative_full,
         "prioritized_actions": {
             "high": high_priority,

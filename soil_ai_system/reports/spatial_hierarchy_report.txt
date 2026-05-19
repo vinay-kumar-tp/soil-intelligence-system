@@ -1,0 +1,11 @@
+SPATIAL HIERARCHY REPORT
+========================
+
+Total States loaded from SQLite DB: 3
+State: Karnataka (0 districts)
+State: Punjab (0 districts)
+State: Tamil Nadu (2 districts)
+  - Sample District: Coimbatore (0 taluks)
+
+Lazy Loading: Verified via SQLite indexed lookups and LRU cache.
+Status: Passed

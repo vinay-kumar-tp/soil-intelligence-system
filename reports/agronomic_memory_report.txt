@@ -1,0 +1,35 @@
+========================================================================
+PHASE 7C — SESSION MEMORY INTELLIGENCE REPORT
+========================================================================
+ANONYMOUS TIMELINE PERSISTENCE
+
+1. SYSTEM DESIGN & PRIVACY BOUNDARIES
+-------------------------------------
+* Module: soil_ai_system/session_memory/memory_manager.py
+* Active memory operates on a strictly in-memory session timeline cache.
+* Zero personal identifiable information (PII) is captured.
+* The cache strictly stores anonymized physical variables: N, P, K ratios, ambient
+  temperatures, humidity rates, rainfall averages, crop suggestions, and isolated
+  nutrient deficiencies over successive runs.
+* Capacity limits are capped at exactly 10 historical records to keep the platform
+  footprint low and lightweight.
+
+2. RECUPERATION & DRIFT ALGORITHMS
+----------------------------------
+* Persistent Gaps:
+  - If a chemical nutrient deficiency (such as Nitrogen) appears two or more times
+    in successive runs, it is flagged as a "Recurring Soil Deficiency".
+* Micro-Environmental Drifts:
+  - Temperature Drift: Calculated as the delta between the current run's temperature
+    and the session's first run temperature.
+  - Drying Trend (Drought Drift): Triggered when temp drift is positive (> 2°C)
+    paired with a declining humidity profile over the session lifecycle.
+  - Rainfall trends: Classified dynamically into "drying", "wetting", or "stable".
+
+3. OPTIMIZING DECISION CONTINUITY
+---------------------------------
+* Memory provides the critical bridge between isolated inference requests.
+* By remembering prior states, recommendations adapt to long-term trends, advising
+  the grower on transitional strategies (e.g. soil recovery cover cycles before
+  resuming intensive cropping).
+========================================================================

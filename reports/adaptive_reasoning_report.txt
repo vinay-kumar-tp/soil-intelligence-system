@@ -1,0 +1,38 @@
+========================================================================
+PHASE 7B & 7D — RELATIONSHIP-AWARE & ADAPTIVE REASONING LAYER REPORT
+========================================================================
+DETERMINISTIC DECISION RECONSTRUCTION
+
+1. THE PARADIGM SHIFT: RELATIONSHIP-AWARE INFERENCE
+---------------------------------------------------
+Traditional machine learning yields raw classification probabilities based on
+discrete boundaries. Our Relationship-Aware Reasoning upgrade fuses these ML outputs
+with:
+* Real-time spatial boundaries & climate forecasts (Phase 6Z live context)
+* Semantic relationship assertions derived from our Agronomic Knowledge Graph.
+
+The result is a deterministic, explainable, and contextually aware recommendation,
+ensuring recommendations never propose crops under hostile localized limits.
+
+2. ADAPTIVE RECOMMENDATION WEIGHTING (DETERMINISTIC RULES)
+----------------------------------------------------------
+* Module: soil_ai_system/adaptive_reasoning/engine.py
+* The engine dynamically adjusts confidence scores based on cumulative timeline
+  and session trends, while preserving deterministic and explainable boundaries:
+  - Repeated Drought Signals:
+    If cumulative weather telemetry in the active session displays a warming trend
+    and decreasing air humidity (Drought Trend), any water-thirsty crop (e.g. Rice,
+    Sugarcane) suffers an automatic risk penalty (+20.0 to risk offsets), lowering
+    its suitability score dynamically.
+  - Persistent Nutrient Gaps:
+    If consecutive runs detect repeated Nitrogen/Potassium deficiencies (Recurring
+    Deficiencies), the engine automatically triggers a CRITICAL RECOVERY state.
+    This boosts organic cover cropping, green manure applications, and bio-fertilizer
+    schedules to reconstruct the physical soil profile.
+
+3. PRESERVED PIPELINES
+----------------------
+* All adaptive weightings occur outside the core XGBoost/DNN weights.
+* Preprocessing pipelines, standard models, and local SHAP model explainability
+  remain entirely pristine, satisfying all critical safety rules.
+========================================================================

@@ -1,0 +1,24 @@
+=== OBSERVABILITY & METRICS REPORT ===
+Project: Soil Intelligence System
+Phase: 5C - Operational Observability
+
+1. Structured Logging
+- RequestTracingMiddleware captures detailed method, path, and timing info.
+- Global unique Trace IDs mapped to incoming requests for audit trails.
+- All errors gracefully trapped, returning 500 JSON payloads instead of unhandled crashes.
+
+2. Latency Tracking
+- Request latency tracked precisely to millisecond granularity.
+- Latency history recorded in memory and written sequentially to logs/operations/metrics.json.
+
+3. Inference Analytics (Usage Metrics)
+- Model Selection Frequency is captured via X-Trace-Id tags.
+- Predictions (e.g., how often 'Maize' vs 'Rice' is recommended) tracked and flushed to disk safely with Threading.Lock().
+
+4. Cache Hit/Miss Ratio
+- Artifact loaders globally record hits/misses to `metrics.json`.
+- System administrators can monitor cache effectiveness directly in the new frontend Operational Dashboard.
+
+5. Grafana & Prometheus Compatibility
+- All operational data is natively exported as JSON via the `GET /api/v1/metrics` endpoint.
+- Easy integration point for Prometheus scrapers or direct parsing by ELK stacks.

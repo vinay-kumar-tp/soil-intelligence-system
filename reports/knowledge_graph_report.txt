@@ -1,0 +1,48 @@
+========================================================================
+PHASE 7A — AGRONOMIC KNOWLEDGE GRAPH ARCHITECTURE & SCHEMA REPORT
+========================================================================
+CONNECTED RELATIONSHIP INTELLIGENCE
+
+1. ARCHITECTURAL OVERVIEW
+-------------------------
+The Agronomic Knowledge Graph establishes a structured representation of key
+agricultural nodes and semantic edges linking crops to their optimal environmental,
+chemical, and physical parameters. Rather than relying solely on tabular
+correlations, the platform now reasons through explicit domain-specific assertions.
+
+2. GRAPH NODE SCHEMAS
+---------------------
+Our graph models relationships between nine core agronomic categories:
+* Crops (e.g. Rice, Maize, Cotton, Groundnut, Sugarcane, Banana, Coconut)
+* Soil Textures (e.g. Clay, Sandy, Loamy, Red Soil, Black Soil)
+* Nutrient Deficiencies (N, P, K)
+* Weather Conditions (Relative Humidity, Temperature, Rainfall)
+* Irrigation Types (Rain-fed, Canal irrigation, Borewell, Drip irrigation)
+* Agro-climatic Zones (Coastal, Delta, Semi-Arid, Western Ghats, Dry Plains)
+* Environmental Risks (Drought, Flood, Heat Stress, Water Stress)
+* Sustainability Factors (Water footprint, carbon footprint, soil carbon depletion)
+
+3. GRAPH EDGE RULES (EXAMPLES)
+------------------------------
+* Rice Node:
+  - prefers_soil -> clay, loamy
+  - requires_humidity -> high
+  - sensitive_to -> drought, water_stress
+  - demands -> high Nitrogen
+  - suited_for -> Coastal, Delta agro-climatic zones
+* Groundnut Node:
+  - prefers_soil -> sandy, red soil, loamy
+  - suited_for -> Semi-Arid, Dry Plains, Coastal
+  - nitrogen_fixer -> True (Acts as a natural replenisher)
+  - sensitive_to -> drought, frost
+
+4. RELATIONSHIP ENRICHMENT TRAVERSAL
+------------------------------------
+* Module: soil_ai_system/knowledge_graph/graph.py
+* The traversal engine walks the graph edges during standard inference runs.
+* It compares manual parameters against the selected crop's prefered edges.
+* It outputs:
+  - Matching edges (reaffirming indicators)
+  - Conflicting edges (alerting penalties)
+  - Sustainability factors (detailing the ecological footprint of the selected crop)
+========================================================================

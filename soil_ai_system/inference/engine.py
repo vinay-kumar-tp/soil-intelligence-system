@@ -20,6 +20,10 @@ from inference.recommenders import generate_recommendations
 from inference.loaders import registry_cache
 from inference.preprocessors import preprocess_for_task
 from inference.decision_support import generate_decision_support
+from recommendation_engine.spatial_reasoning_engine import apply_spatial_reasoning
+from weather.weather_context_engine import get_live_weather_context
+from adaptive_reasoning.engine import execute_adaptive_reasoning
+from session_memory.memory_manager import global_session_memory
 
 logger = logging.getLogger("inference.engine")
 
@@ -33,6 +37,8 @@ def run_full_inference(input_data: Dict[str, Any]) -> Dict[str, Any]:
     Returns:
         Structured JSON dictionary containing predictions, explanations, and recommendations.
     """
+    import copy
+    input_data = copy.deepcopy(input_data)
     start_time = time.time()
     logger.info("Starting unified inference request.")
     
@@ -55,6 +61,8 @@ def run_full_inference(input_data: Dict[str, Any]) -> Dict[str, Any]:
     try:
         if "error" not in crop_res and "error" not in fert_res and "error" not in def_res:
             decision_support = generate_decision_support(input_data, crop_res, fert_res, def_res)
+            # Apply Spatial Intelligence (Phase 6X)
+            decision_support = apply_spatial_reasoning(input_data, decision_support)
     except Exception as e:
         logger.error("Decision Support Engine failed: %s", e)
         decision_support = {"error": f"Decision support failure: {str(e)}"}
@@ -81,6 +89,36 @@ def run_full_inference(input_data: Dict[str, Any]) -> Dict[str, Any]:
         logger.warning("Explainability generation failed: %s", e)
         explanations["error"] = "Failed to generate explanations."
 
+    # 5B. Weather & Environmental Intelligence Orchestration (Phase 6Z)
+    weather_intel = {}
+    try:
+        lat = input_data.get("latitude")
+        lon = input_data.get("longitude")
+        if lat is not None and lon is not None:
+            weather_intel = get_live_weather_context(float(lat), float(lon), input_data)
+        elif input_data.get("weather_context"):
+            weather_intel = input_data.get("weather_context")
+    except Exception as e:
+        logger.warning("Weather Intelligence orchestration failed: %s", e)
+        weather_intel = {"status": "error", "message": str(e)}
+
+    # 5C. Adaptive & Connected Intelligence Layer (Phase 7)
+    adaptive_intel = {}
+    try:
+        base_predictions = {
+            "predictions": {
+                "crop": crop_res,
+                "fertility": fert_res,
+                "deficiency": def_res,
+            }
+        }
+        adaptive_intel = execute_adaptive_reasoning(input_data, base_predictions, weather_intel)
+        # Store in session memory
+        global_session_memory.add_entry(input_data, base_predictions)
+    except Exception as e:
+        logger.warning("Adaptive reasoning layer failed: %s", e)
+        adaptive_intel = {"status": "error", "message": str(e)}
+
     # 6. Build Unified JSON Response
     latency_ms = round((time.time() - start_time) * 1000, 2)
     
@@ -94,6 +132,8 @@ def run_full_inference(input_data: Dict[str, Any]) -> Dict[str, Any]:
         "recommendations": recs,
         "decision_support": decision_support,
         "explanations": explanations,
+        "weather_intelligence": weather_intel,
+        "adaptive_intelligence": adaptive_intel,
         "metadata": {
             "inference_latency_ms": latency_ms,
             "model_versions": {

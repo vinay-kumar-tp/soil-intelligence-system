@@ -1,0 +1,26 @@
+# Use an official Python runtime as a parent image
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV APP_ENV=container
+
+# Set the working directory
+WORKDIR /app
+
+# Install Python dependencies
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the application code
+COPY soil_ai_system /app/soil_ai_system
+
+# Set Python search path to include the core app root
+ENV PYTHONPATH=/app/soil_ai_system
+
+# Expose the Streamlit port
+EXPOSE 8501
+
+# Start Streamlit
+CMD ["streamlit", "run", "soil_ai_system/frontend/app.py", "--server.port=8501", "--server.address=0.0.0.0"]

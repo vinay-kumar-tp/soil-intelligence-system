@@ -97,6 +97,8 @@ python -m training.phase2f_registry
 ```
 
 After Phase 2 stabilizes:
-- Phase 3: FastAPI inference server
-- Phase 4: Streamlit dashboard
-- Phase 5: Cloud deployment
+- Phase 3: FastAPI inference server (done)
+- Phase 4: Streamlit dashboard (done)
+- Phase 5: Cloud deployment (in progress)
+- Phase 6: Agronomic Intelligence (done)
+- Phase 6X: Spatial Agronomic Intelligence & Geo-Contextual Reasoning (done)

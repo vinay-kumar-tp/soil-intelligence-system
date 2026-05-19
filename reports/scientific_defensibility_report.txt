@@ -1,0 +1,71 @@
+================================================================================
+                SECTION 5 — SCIENTIFIC DEFENSIBILITY AUDIT REPORT
+================================================================================
+AUDITOR: Principal AI Systems Architect
+DATE: 2026-05-19
+STATUS: AGRONOMIC AND HYBRID REASONING EVALUATION
+
+1. SCIENTIFIC DEFENSIBILITY STATUS SUMMARY
+-------------------------------------------
+While the machine learning models capture tabular correlation, our hybrid reasoning
+layers (Knowledge Graph, Spatial Engine, and Adaptive Memory) serve as the "safety
+harness" that keeps the platform realistic. However, to maintain research-grade
+defensibility, we must critically evaluate if our heuristic weights are scientifically
+grounded or arbitrary.
+
+Here is the scientific audit of our rules and modifiers:
+
+| Modifying Rule | Agronomic Logic | Defensible? | Status | Recommended Action |
+| :--- | :--- | :--- | :--- | :--- |
+| **Nitrogen-Fixer Bonus (+20)** | Groundnuts naturally capture and replenish N. | **Extremely High** | Fully Grounded | **KEEP** |
+| **Drought-Drift Penalty (-20)**| Penalize water-thirsty crops during dry trends. | **High** | Grounded | **KEEP** |
+| **Soil Texture Matching (+15)**| Match crop roots to soil aeration/water holding. | **High** | Grounded | **KEEP** |
+| **Agro-Climatic Zone (+10)** | Align crops with native climate constraints. | **Moderate** | Partially Arbitrary| **STRENGTHEN** |
+| **Chemical pH Score (30%)**  | pH bounds determine soil nutrient absorption. | **Extremely High** | Fully Grounded | **KEEP** |
+
+---
+
+2. CRITICAL AUDIT OF RULES & MODIFIERS
+
+### A. Nitrogen-Fixer Recuperation (+20 Score Offset)
+*   **The Logic:** If Nitrogen is depleted in the soil (<50) and the predicted crop is Groundnut (a legume), the system adds a +20 score offset.
+*   **Agronomic Basis:** Extremely sound. Legumes form symbiotic relationships with *Rhizobium* bacteria, fixing atmospheric Nitrogen and converting it to organic forms. Recommending groundnut during Nitrogen gaps acts as a natural, crop-based soil reclamation cycle.
+
+### B. Soil Texture Compatibility (+15 Score Offset / -10 Penalty)
+*   **The Logic:** Adding offsets if clay/sandy/loamy matches the crop preference.
+*   **Agronomic Basis:** Sound. Soil texture controls water holding capacity and aeration. For example, Rice requires clay/clay-loamy profiles to hold standing water. Planting Rice in sandy soils leads to immediate water percolation and crop failure.
+
+### C. Agro-Climatic Zone Matching (+10 Offset / -5 Penalty)
+*   **The Logic:** Checking native region strings (e.g. Coastal, Delta).
+*   **Agronomic Basis:** Partially arbitrary.
+    *   *The Weakness:* A string match (e.g. "Coastal" vs "Delta") is too coarse. Soil parameters and local temperatures overlap significantly between zones.
+    *   *Remediation:* Strengthen this logic by replacing simple zone string matches with hard, continuous biophysical ranges (e.g., matching the crop's actual minimum and maximum thermal and rainfall bounds against real-time API values).
+
+### D. Session Memory Temperature/Rainfall Drift
+*   **The Logic:** Adjusting confidence if a "drying trend" (temperature rises $>2^\circ\text{C}$ and humidity falls) is detected over 10 runs.
+*   **Agronomic Basis:** Moderately defensible.
+    *   *The Weakness:* Tracking drifts across 10 consecutive browser clicks (which happen in a few seconds) is an abstraction of true long-term temporal drifts. It acts nicely as a *demo utility* of session consistency, but has low long-term physical value.
+    *   *Remediation:* Limit this to localized village context sessions and clarify in the UI that this represents "active micro-climate session simulation".
+
+---
+
+3. SCIENTIFIC RECONSTRUCTION AND STRENGTHENING ROADMAP
+------------------------------------------------------
+To move our hybrid reasoning from "rule-of-thumb" heuristics to true research-grade defensibility:
+1.  **Map Graph Edges to Biophysical Ranges:**
+    Replace coarse labels (e.g. `"requires_humidity": "high"`) in `knowledge_graph/graph.py` with continuous WMO-defined boundaries:
+    ```python
+    "rice": {
+        "temperature_range": (20.0, 38.0), # Celsius
+        "humidity_range": (60.0, 100.0),   # % Relative Humidity
+        "water_footprint_l_per_kg": 2500
+    }
+    ```
+2.  **Publish the Equations in the Report:**
+    Use standard USDA/ICAR crop requirement indexes to scale compatibility offsets, ensuring every weight is backed by published agronomic literature.
+
+4. SECTION CONCLUSION
+---------------------
+*   **ACTION:** Retain the Knowledge Graph safety offsets as they prevent major agronomic mismatches.
+*   **ACTION:** Replace coarse string matching with continuous weather-sensor range evaluations in the next development sprint.
+================================================================================

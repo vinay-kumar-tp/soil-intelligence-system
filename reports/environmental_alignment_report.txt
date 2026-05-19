@@ -1,0 +1,54 @@
+========================================================================
+PHASE 6Z — LIVE WEATHER ENVIRONMENTAL ALIGNMENT & REALISM REPORT
+========================================================================
+ENVIRONMENTAL COMPATIBILITY & REALITY VALIDATION SCORER
+
+1. THE REALITY VALIDATION CHALLENGE
+-----------------------------------
+A frequent issue in precision agricultural systems is input variance: users entering
+ambient conditions (temperature, humidity, rainfall) that represent seasonal
+averages, design assumptions, or errors, which differ significantly from current, 
+ground-truth local weather conditions.
+
+To resolve this, we implemented the Reality Validation Scorer.
+
+2. MATH & LOGIC OF ALIGNMENT SCORING
+------------------------------------
+* Module: soil_ai_system/weather/analyzers/compatibility.py
+* Formula:
+  - We calculate:
+    temp_diff = abs(user_temperature - live_temperature)
+    hum_diff = abs(user_humidity - live_humidity)
+  - Penalties are applied:
+    temp_penalty = temp_diff * 4.5
+    hum_penalty = hum_diff * 1.2
+  - Overall Alignment Score:
+    alignment_score = max(5, min(100, int(100 - temp_penalty - hum_penalty)))
+
+* Interpretation Tiers:
+  - [80% - 100%]: HIGH CONSISTENCY. Telemetry inputs reflect real-time conditions.
+  - [50% - 79%]: MODERATE DIVERGENCE. Minor sensor offsets or seasonal transitions.
+  - [5% - 49%]: CRITICAL ANOMALY. Flagged in warning red to indicate significant data conflict.
+
+3. CONSISTENCY WARNINGS
+-----------------------
+When critical divergences are detected, explainable, scientific warnings are produced:
+* "Temperature anomaly: Local sensors read X°C but manual input is Y°C."
+* "Humidity divergence: Local relative humidity is X% vs manual Y%."
+* "Water budget mismatch: Heavy rain context specified but local forecast is dry (<10mm next 7 days)."
+
+4. ENVIRONMENTAL COMPATIBILITY SIGNALS
+--------------------------------------
+The system parses live humidity and short-term forecasts to offer positive compatibility indicators:
+* High humidity (>75%): "Current atmospheric humidity strongly favors high-transpiration crops like paddy or jute."
+* Heavy forecast (>50mm): "Rainfall forecast indicates robust water compatibility for high-hydration crop cycles."
+* Low rainfall forecast: "Near-term forecast indicates minimal rainfall; irrigation adjustments advised."
+
+5. ENVIRONMENTAL RISK MATRIX
+----------------------------
+Deterministic, non-hallucinatory risk levels (Low, Medium, High) are evaluated for:
+* Drought Risk: Triggered by extreme heat (>35°C) and dry air (<30% humidity).
+* Flood Sensitivity: Triggered by immediate rainfall or heavy 7-day accumulation (>120mm).
+* Heat Stress: Triggered by temperatures above 34°C (Medium) or 40°C (High).
+* Water Stress: Triggered by local drought, worsened if crop is strictly rain-fed.
+* High Winds: Triggers crop mechanical lodging warnings if wind speeds exceed 25 km/h.

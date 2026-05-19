@@ -1,0 +1,35 @@
+========================================================================
+PHASE 7E & 7F — FINAL RESEARCH DIFFERENTIATION REPORT
+========================================================================
+AGRONOMIC INTELLIGENCE GRAPH SCORE & LONG-FORM NARRATIVES
+
+1. AGRONOMIC INTELLIGENCE GRAPH SCORE FORMULATION
+-------------------------------------------------
+To establish a definitive research differentiator, we engineered the **Agronomic
+Intelligence Graph Score (0 - 100)**. This score unifies multiple mathematical dimensions:
+* 35% Weight: Core ML crop probability confidence.
+* 30% Weight: Live environmental telemetry alignment.
+* 20% Weight: Knowledge Graph relationship compatibility.
+* 15% Weight: Chemical soil health rating (NPK ratio and pH neutrality).
+* Penalties: Subtracted risk points derived from drought, flood, heat stress,
+  high winds, or drying drifts.
+
+Equation:
+$$\text{Graph Score} = \left(0.35 \times \text{ML Conf}\right) + \left(0.30 \times \text{Env Align}\right) + \left(0.20 \times \text{Graph Compat}\right) + \left(0.15 \times \text{Soil Health}\right) - \text{Risks}$$
+
+2. INTUITIVE INTERPRETATION
+---------------------------
+* High Score (>=80): Perfect agronomic match. Highly sustainable crop selection.
+* Moderate Score (50-79): Favorable match, but requires soil treatments or water management.
+* Low Score (<50): Crop incompatible with localized live variables or severe soil depletion.
+
+3. PREMIUM LONG-FORM AI DECISION NARRATIVES
+-------------------------------------------
+Rather than providing single-sentence predictions, the platform constructs highly
+detailed, premium agronomic narrative reports across five distinct domains:
+* Field Suitability Synthesis: Fusing real-time weather and coordinate properties.
+* Organic Soil Recovery Plans: Suggesting leguminous cycles, mulches, and bio-nutrients.
+* Seasonal Climate Outlooks: Warning against drought drift or drainage issues.
+* Sustainability Insights: Highlighting water footprints, taproot details, and carbon goals.
+* Irrigation advisories: Transitioning between canal, borewell, or drip schedules.
+========================================================================

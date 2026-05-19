@@ -4,7 +4,7 @@ Validates inference payloads securely without contaminating the main pipeline.
 Provides Pydantic schemas for the incoming FastAPI requests.
 """
 
-from typing import Optional
+from typing import Optional, Dict, Any
 
 from pydantic import BaseModel, Field, root_validator
 
@@ -23,6 +23,22 @@ class SoilInferenceRequest(BaseModel):
     
     # Optional context features
     region: Optional[str] = Field(None, description="Optional region name for localized recommendations")
+    
+    # Phase 6X: Spatial Agronomic Intelligence fields
+    region_zone: Optional[str] = Field(None, description="Region Zone (e.g., southern_india)")
+    state: Optional[str] = Field(None, description="State (e.g., Tamil Nadu)")
+    district: Optional[str] = Field(None, description="District (e.g., Chennai)")
+    taluk: Optional[str] = Field(None, description="Taluk / Tehsil")
+    hobli: Optional[str] = Field(None, description="Hobli / Block")
+    village: Optional[str] = Field(None, description="Village")
+    agro_climatic_zone: Optional[str] = Field(None, description="Agro-Climatic Zone (e.g., Coastal)")
+    irrigation_type: Optional[str] = Field(None, description="Irrigation Type (e.g., Canal irrigation)")
+    soil_texture: Optional[str] = Field(None, description="Soil Texture (e.g., Clay)")
+    seasonal_context: Optional[str] = Field(None, description="Seasonal Context (e.g., Kharif)")
+    # Phase 6Z: Real-time Weather Intelligence fields
+    latitude: Optional[float] = Field(None, description="Latitude of target coordinates")
+    longitude: Optional[float] = Field(None, description="Longitude of target coordinates")
+    weather_context: Optional[Dict[str, Any]] = Field(None, description="Cached or pre-fetched live weather report")
     
     class Config:
         json_schema_extra = {

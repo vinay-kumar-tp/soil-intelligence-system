@@ -1,0 +1,1 @@
+{"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {"state": "Tamil Nadu", "district": "Thanjavur", "taluk": "Kumbakonam", "hobli": "Swamimalai", "village": "Thiruvalanjuli"}, "geometry": {"type": "Polygon", "coordinates": [[[79.37, 10.95], [79.4, 10.95], [79.4, 10.98], [79.37, 10.98], [79.37, 10.95]]]}}]}

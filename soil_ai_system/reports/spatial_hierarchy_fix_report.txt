@@ -1,0 +1,8 @@
+SPATIAL HIERARCHY FIX REPORT
+============================
+
+- Addressed 'Unknown' fallback issue by dynamically setting safe indexes.
+- Handled missing hierarchy levels gracefully by swapping to 'Data Missing'.
+- Ensured parent dropdown changes (e.g., State) clear child state variables (District, Taluk, Hobli, Village) correctly.
+
+Status: Passed

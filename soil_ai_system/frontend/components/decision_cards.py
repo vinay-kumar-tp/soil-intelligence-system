@@ -148,39 +148,84 @@ def render_prioritized_recommendations(priority_dict: dict):
     """
     render_html(html_content)
 
-def render_comparative_crops(top_k_crops: list):
-    """Renders a stunning horizontal comparative list of Top 3 compatible crops."""
+def render_comparative_crops(top_k_crops: list, crops_to_avoid: list = None):
+    """Renders a stunning horizontal comparative list of Top 3 compatible crops and a list of crops to avoid."""
     st.markdown("""
     <style>
     .comp-container {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
-        margin-bottom: 1.5rem;
+        gap: 20px;
+        margin-bottom: 2rem;
     }
     .comp-card {
-        background: #fbfcfb;
-        border: 1px solid rgba(85, 107, 47, 0.15);
-        border-radius: 16px;
-        padding: 1.25rem;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.01);
+        background: #ffffff;
+        border: 1px solid rgba(85, 107, 47, 0.12);
+        border-radius: 20px;
+        padding: 1.5rem;
+        box-shadow: 0 10px 25px rgba(85, 107, 47, 0.03);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .comp-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(85, 107, 47, 0.08);
     }
     .comp-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 8px;
+        margin-bottom: 12px;
         border-bottom: 1px solid rgba(0,0,0,0.05);
-        padding-bottom: 6px;
+        padding-bottom: 8px;
     }
-    .comp-name { font-size: 1.15rem; font-weight: 800; color: #2b3a18; }
-    .comp-score { font-size: 0.9rem; font-weight: 700; color: #65a30d; background: #f1fbe7; padding: 2px 8px; border-radius: 20px;}
-    .comp-desc { font-size: 0.82rem; color: #6b7280; margin-bottom: 10px; line-height: 1.4; font-style: italic;}
-    .comp-section-title { font-size: 0.78rem; font-weight: 700; color: #4b5563; text-transform: uppercase; margin-top: 8px; margin-bottom: 3px; display: block;}
-    .comp-bullets { margin: 0; padding-left: 1rem; font-size: 0.8rem; color: #4b5563; line-height: 1.4;}
+    .comp-name { font-size: 1.2rem; font-weight: 800; color: #2b3a18; }
+    .comp-score { font-size: 0.85rem; font-weight: 700; color: #4d7c0f; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 3px 10px; border-radius: 20px;}
+    .comp-desc { font-size: 0.85rem; color: #64748b; margin-bottom: 12px; line-height: 1.45; font-style: italic;}
+    .comp-section-title { font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase; margin-top: 10px; margin-bottom: 4px; display: block;}
+    .comp-bullets { margin: 0; padding-left: 1.2rem; font-size: 0.85rem; color: #334155; line-height: 1.45;}
+    
+    /* Avoid Section Styling */
+    .avoid-title {
+        color: #991b1b !important;
+        font-size: 1.3rem !important;
+        margin-top: 2rem !important;
+        margin-bottom: 1rem !important;
+        font-weight: 800 !important;
+        border-left: 4px solid #ef4444;
+        padding-left: 10px;
+    }
+    .avoid-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-bottom: 1.5rem;
+    }
+    .avoid-card {
+        background: #fff5f5;
+        border: 1px solid #fee2e2;
+        border-radius: 16px;
+        padding: 1.25rem;
+        box-shadow: 0 4px 10px rgba(153, 27, 27, 0.02);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.2s;
+    }
+    .avoid-card:hover {
+        transform: translateY(-3px);
+    }
+    .avoid-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+    .avoid-name { font-size: 1.15rem; font-weight: 800; color: #991b1b; }
+    .avoid-score { font-size: 0.8rem; font-weight: 700; color: #b91c1c; background: #fee2e2; padding: 2px 8px; border-radius: 12px; border: 1px solid #fca5a5;}
+    .avoid-reason { font-size: 0.85rem; color: #7f1d1d; line-height: 1.45; }
     </style>
     """, unsafe_allow_html=True)
     
@@ -200,12 +245,12 @@ def render_comparative_crops(top_k_crops: list):
                     <span class="comp-score">{crop['suitability_score']}% Match</span>
                 </div>
                 <div class="comp-desc">"{crop['description']}"</div>
-                <span class="comp-section-title" style="color: #15803d;">✚ Climatic Advantages:</span>
+                <span class="comp-section-title" style="color: #166534;">✚ Climatic Advantages:</span>
                 <ul class="comp-bullets">{adv_html}</ul>
-                <span class="comp-section-title" style="color: #b91c1c;">⚠ Agronomic Risks:</span>
+                <span class="comp-section-title" style="color: #991b1b;">⚠ Agronomic Risks:</span>
                 <ul class="comp-bullets">{risk_html}</ul>
             </div>
-            <div style="margin-top: 10px; border-top: 1px dashed rgba(0,0,0,0.05); padding-top: 6px;">
+            <div style="margin-top: 12px; border-top: 1px dashed rgba(0,0,0,0.05); padding-top: 8px;">
                 <span class="comp-section-title" style="color: #d97706;">✖ Limiting Factors:</span>
                 <ul class="comp-bullets">{limit_html}</ul>
             </div>
@@ -218,3 +263,26 @@ def render_comparative_crops(top_k_crops: list):
     </div>
     """
     render_html(html_container)
+    
+    if crops_to_avoid:
+        st.markdown("<h4 class='avoid-title'>⚠️ Crops Highly Recommended to Avoid</h4>", unsafe_allow_html=True)
+        avoid_cards = []
+        for item in crops_to_avoid:
+            avoid_cards.append(f"""
+            <div class="avoid-card">
+                <div>
+                    <div class="avoid-header">
+                        <span class="avoid-name">❌ {item['crop']}</span>
+                        <span class="avoid-score">{item['suitability_score']}% Match</span>
+                    </div>
+                    <div class="avoid-reason"><strong>Limitation:</strong> {item['reason']}</div>
+                </div>
+            </div>
+            """)
+            
+        html_avoid = f"""
+        <div class="avoid-container">
+            {"".join(avoid_cards)}
+        </div>
+        """
+        render_html(html_avoid)

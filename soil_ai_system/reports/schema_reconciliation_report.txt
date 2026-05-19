@@ -7,17 +7,3 @@ Dataset: crop
   Renamed columns: {'label': 'crop'}
   Final columns: ['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall', 'crop']
   Missing required columns: []
-
-Dataset: fertility
-  Raw path: C:\Users\vinay\PROJECTS\soil-intelligence-system\soil_ai_system\datasets\raw\soil_fertility.csv
-  Original columns: ['N', 'P', 'K', 'pH', 'EC', 'OC', 'S', 'Zn', 'Fe', 'Cu', 'Mn', 'B', 'Output']
-  Renamed columns: {'pH': 'ph', 'EC': 'ec', 'OC': 'organic_carbon', 'Output': 'fertility_grade'}
-  Final columns: ['N', 'P', 'K', 'ph', 'ec', 'organic_carbon', 'S', 'Zn', 'Fe', 'Cu', 'Mn', 'B', 'fertility_grade']
-  Missing required columns: []
-
-Dataset: regional
-  Raw path: C:\Users\vinay\PROJECTS\soil-intelligence-system\soil_ai_system\datasets\raw\southern_india_soil.csv
-  Original columns: ['District', 'Nitrogen Value', 'Phosphorous value', 'Potassium value', 'pH']
-  Renamed columns: {'District': 'region', 'Nitrogen Value': 'N', 'Phosphorous value': 'P', 'Potassium value': 'K', 'pH': 'ph'}
-  Final columns: ['region', 'N', 'P', 'K', 'ph']
-  Missing required columns: []

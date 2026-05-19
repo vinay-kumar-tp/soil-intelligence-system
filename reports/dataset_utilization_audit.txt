@@ -1,0 +1,73 @@
+================================================================================
+                    SECTION 3 — DATASET UTILIZATION AUDIT
+================================================================================
+AUDITOR: Principal AI Systems Architect
+DATE: 2026-05-19
+TARGETS: crop_processed.csv, fertility_processed.csv, regional_processed.csv, southern_india_soil.csv
+
+1. COMPREHENSIVE DATASET ALLOCATION ARCHITECTURE
+------------------------------------------------
+To establish a scientifically defensible modeling foundation, we performed a 
+brutal data utilization audit. Blindly training ML models on all datasets 
+introduces extreme geographical leakage, schema instability, and target conflict.
+
+Here is the audited dataset allocation blueprint:
+
+| Dataset Name | Size | Primary Audited Purpose | Scientifically Defensible? | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **`crop_processed.csv`** | ~2,200 rows | Train Core Crop & Deficiency Classifiers. | Yes. Clean tabular features. | **KEEP FOR TRAINING** |
+| **`fertility_processed.csv`**| ~1,000 rows | Train Core Soil Fertility Classifiers. | Yes. Rich chemical NPK + trace elements. | **KEEP FOR TRAINING** |
+| **`regional_processed.csv`** | 877 rows | Hybrid Reasoning & Spatial Context *only*. | No for training (leakage); Yes for spatial validation. | **ENRICHMENT ONLY** |
+| **`southern_india_soil.csv`**| ~10k rows | Traversal knowledge graph anchoring. | No for training (extreme geographic noise); Yes for baseline coordinates. | **ENRICHMENT ONLY** |
+
+---
+
+2. DETAILED INDIVIDUAL DATASET EVALUATIONS
+------------------------------------------
+
+### A. `crop_processed.csv` (Standard Tabular Soil Features)
+*   **Should train core ML models?** YES. It provides high-quality mappings of N, P, K, pH, and climate variables to 22 different crop categories.
+*   **Scientific Utility:** Extremely High. Follows classic agronomic properties.
+*   **Schema Instability:** Zero. Extremely stable.
+
+### B. `fertility_processed.csv` (Chemical & Trace Nutrient Elements)
+*   **Should train core ML models?** YES. It focuses specifically on the chemical macro/micro-nutrient profile (EC, organic carbon, trace elements S, Zn, Fe, Cu, Mn, B).
+*   **Scientific Utility:** Highly useful for determining chemical soil fertility levels.
+*   **Schema Instability:** Low. The trace columns are clean.
+
+### C. `regional_processed.csv` (Highly Co-dependent Spatial/Regional Mapping)
+*   **Should train core ML models?** **ABSOLUTELY NO.**
+    *   *Why?* The regional dataset is heavily normalized and contains high-frequency spatial-geographic clusters. 
+    *   *The Risk:* If mixed into the training pool of the core classifiers, the model immediately suffers from **Geographic Target Leakage**. It starts ignoring the soil chemical composition and instead memorizes coordinate proxies to get cheap accuracy during offline tests.
+*   **Should ONLY enrich reasoning?** YES. This dataset must be allocated strictly to our spatial reasoning engine and coordinate reverse-resolution checks.
+*   **Is introducing noise/instability?** Yes. It has highly skewed regional bounds.
+
+### D. `southern_india_soil.csv` (Broad Geographical Surveys)
+*   **Should train core ML models?** **NO.**
+    *   *Why?* This dataset contains vast, noisy regional survey coordinates. 
+    *   *The Risk:* The NPK ratios are highly localized and do not map deterministically to clean crop boundaries. Training on this data corrupts the decision boundaries, forcing the models to default to fallback predictions (e.g. Rice or Maize) during serving.
+*   **Should ONLY enrich reasoning?** YES. Allocate strictly to anchor our knowledge graph nodes (Coastal, Delta, Semi-Arid Plains) to real geographical boundaries.
+
+---
+
+3. THE GOLDEN RULE OF THE DATASET ALLOCATION ARCHITECTURE
+---------------------------------------------------------
+```
+                        [ DATASETS POOL ]
+                                │
+        ┌───────────────────────┴───────────────────────┐
+        ▼                                               ▼
+[ MODEL TRAINING POOL ]                      [ HYBRID REASONING POOL ]
+  - crop_processed.csv                         - regional_processed.csv
+  - fertility_processed.csv                    - southern_india_soil.csv
+        │                                               │
+        ▼                                               ▼
+ (Train Core Estimators)                     (Spatial Reverse-Resolution,
+                                              Weather, & Knowledge Graphs)
+```
+
+4. SECTION CONCLUSION
+---------------------
+*   **ACTION:** Ban the mixing of `regional_processed.csv` and `southern_india_soil.csv` features into the training pools of XGBoost/SVM.
+*   **ACTION:** Retain their allocation strictly as reference lookup boundaries for the spatial reasoners and real-time weather alignment checks. This stops geographical leakage dead in its tracks.
+================================================================================

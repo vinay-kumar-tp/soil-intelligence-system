@@ -17,9 +17,10 @@ from frontend.components.decision_cards import (
     render_prioritized_recommendations,
     render_comparative_crops
 )
+from frontend.components.map_view import render_interactive_map, render_hierarchy_panel
 
 st.set_page_config(
-    page_title="Ecoland - Organic Farming",
+    page_title="AgroSphere - Precision Agronomic Platform",
     page_icon="🌿",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -34,10 +35,11 @@ st.markdown("""
         font-family: 'Plus Jakarta Sans', sans-serif;
     }
     
-    /* Clean White/Light Olive Background */
+    /* Clean Olive Green & White Background */
     .stApp {
-        background-color: #fcfdfc;
-        color: #1f2937;
+        background-color: #fdfdfc;
+        background-image: linear-gradient(180deg, #fdfdfc 0%, #f4f7f4 100%);
+        color: #2b3a18;
     }
     
     /* Top Navigation Mock */
@@ -45,21 +47,21 @@ st.markdown("""
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem 0;
-        margin-bottom: 4rem;
-        border-bottom: 1px solid rgba(85, 107, 47, 0.2);
+        padding: 1.5rem 0;
+        margin-bottom: 3rem;
+        border-bottom: 2px solid rgba(85, 107, 47, 0.1);
     }
-    .logo { color: #556b2f; font-weight: 800; font-size: 1.5rem; display: flex; align-items: center; gap: 10px;}
-    .nav-links { display: flex; gap: 30px; color: #374151; font-weight: 600; font-size: 1rem;}
+    .logo { color: #4d7c0f; font-weight: 800; font-size: 1.8rem; display: flex; align-items: center; gap: 10px;}
+    .nav-links { display: flex; gap: 30px; color: #4b5563; font-weight: 600; font-size: 1rem;}
     
     /* Hero Section */
     .hero-subtitle {
         color: #65a30d;
-        font-size: 1.1rem;
-        font-weight: 700;
+        font-size: 1.2rem;
+        font-weight: 800;
         margin-bottom: 10px;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 2px;
     }
     .main-header {
         color: #2b3a18;
@@ -72,7 +74,7 @@ st.markdown("""
     .hero-desc {
         color: #4b5563;
         font-size: 1.2rem;
-        max-width: 600px;
+        max-width: 650px;
         margin-bottom: 3rem;
         line-height: 1.6;
     }
@@ -81,7 +83,7 @@ st.markdown("""
     .block-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
+        gap: 25px;
         margin-bottom: 3rem;
     }
     .square-block {
@@ -92,41 +94,41 @@ st.markdown("""
         align-items: center;
         justify-content: center;
         text-align: center;
-        box-shadow: 0 10px 25px rgba(85, 107, 47, 0.1);
+        box-shadow: 0 15px 35px rgba(85, 107, 47, 0.08);
         transition: transform 0.3s ease;
         height: 250px;
     }
-    .square-block:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(85, 107, 47, 0.2); }
+    .square-block:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(85, 107, 47, 0.15); }
     .block-icon {
-        background: rgba(255,255,255,0.2);
+        background: rgba(255,255,255,0.3);
         border-radius: 50%;
-        width: 70px;
-        height: 70px;
+        width: 75px;
+        height: 75px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 2rem;
+        font-size: 2.2rem;
         margin-bottom: 1rem;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     }
-    .block-green { background: linear-gradient(135deg, #65a30d, #4d7c0f); color: white; }
-    .block-brown { background: linear-gradient(135deg, #78350f, #451a03); color: white; }
-    .block-tan { background: linear-gradient(135deg, #d4a373, #b59874); color: white; }
+    .block-green { background: linear-gradient(135deg, #65a30d, #4d7c0f); color: white; border: 1px solid #a3e635;}
+    .block-brown { background: linear-gradient(135deg, #78350f, #451a03); color: white; border: 1px solid #d97706;}
+    .block-tan { background: linear-gradient(135deg, #d4a373, #b59874); color: white; border: 1px solid #fcd34d;}
     
-    .metric-title { font-size: 1.1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; opacity: 0.9;}
-    .metric-value { font-size: 2.2rem; font-weight: 800; margin: 0; text-transform: capitalize; }
+    .metric-title { font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 5px; opacity: 0.9;}
+    .metric-value { font-size: 2.5rem; font-weight: 800; margin: 0; text-transform: capitalize; }
     
-    /* Form Area */
+    /* Form Area (Clean Light Mode) */
     .form-panel {
-        background: #f4f7f4;
-        border: 1px solid rgba(85, 107, 47, 0.2);
+        background: #ffffff;
+        border: 1px solid rgba(85, 107, 47, 0.15);
         border-radius: 24px;
         padding: 2.5rem;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        box-shadow: 0 10px 40px rgba(85, 107, 47, 0.05);
     }
     
     .stButton>button {
-        background: #556b2f;
+        background: linear-gradient(135deg, #65a30d, #4d7c0f);
         color: white;
         border-radius: 50px;
         padding: 1rem 2.5rem;
@@ -134,26 +136,34 @@ st.markdown("""
         font-size: 1.1rem;
         border: none;
         width: auto;
-        box-shadow: 0 10px 25px rgba(85, 107, 47, 0.3);
+        box-shadow: 0 10px 20px rgba(77, 124, 15, 0.25);
+        transition: all 0.3s ease;
     }
     .stButton>button:hover {
-        background: #4d7c0f;
+        background: linear-gradient(135deg, #4d7c0f, #3f6212);
         color: white;
+        transform: scale(1.05);
     }
     
     /* Input Styling */
     .stNumberInput>div>div>input, .stSelectbox>div>div>div { 
         font-size: 1.1rem; 
-        padding: 0.5rem; 
-        border-radius: 8px; 
-        background: white; 
-        color: #1f2937; 
-        border: 1px solid #d1d5db;
+        padding: 0.6rem; 
+        border-radius: 10px; 
+        background: #f8fafc; 
+        color: #1e293b; 
+        border: 1px solid #cbd5e1;
+        transition: border 0.3s;
+    }
+    
+    .stNumberInput>div>div>input:focus, .stSelectbox>div>div>div:focus {
+        border-color: #65a30d;
+        box-shadow: 0 0 0 2px rgba(101, 163, 13, 0.2);
     }
     
     /* Text Overrides for Form */
-    .stMarkdown h3 { color: #2b3a18 !important; }
-    label { color: #4b5563 !important; font-weight: 600 !important; }
+    .stMarkdown h3, .stMarkdown h4 { color: #2b3a18 !important; font-weight: 800;}
+    label { color: #475569 !important; font-weight: 700 !important; font-size: 0.95rem !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -161,7 +171,7 @@ def page_predictive_analysis():
     # Top Navigation Simulation
     st.markdown("""
     <div class="top-nav">
-        <div class="logo">🌾 Ecoland</div>
+        <div class="logo">🌾 AgroSphere</div>
         <div class="nav-links">
             <span>Home</span>
             <span>About Us</span>
@@ -172,8 +182,8 @@ def page_predictive_analysis():
     
     # Hero Section
     st.markdown("""
-    <div class="hero-subtitle">We are Producing Natural Products</div>
-    <div class="main-header">Organic Farming<br>and Agriculture</div>
+    <div class="hero-subtitle">HIGH-PERFORMANCE PRECISION AGRONOMY</div>
+    <div class="main-header">Soil Intelligence<br>& Crop Suitability</div>
     <div class="hero-desc">Configure your field's soil metrics to generate AI-driven agronomic recommendations. A successful farm utilizes precision data to maximize yield and minimize chemical runoff.</div>
     """, unsafe_allow_html=True)
 
@@ -194,19 +204,64 @@ def page_predictive_analysis():
             ph_val = st.number_input("Soil pH", 0.0, 14.0, 6.5)
         with col4:
             rain_val = st.number_input("Rainfall (mm)", 0.0, 5000.0, 200.0)
-            region = st.selectbox("Region", ["Unknown", "southern_india", "northern_plains", "coastal"])
+            
+        st.markdown("</div>", unsafe_allow_html=True)
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("<div class='form-panel'>", unsafe_allow_html=True)
+        st.markdown("<h3 style='color: #2b3a18; margin-bottom: 20px;'>Hierarchical Geo-Spatial Agronomic Intelligence</h3>", unsafe_allow_html=True)
+        
+        map_col, form_col = st.columns([1, 1.2])
+        
+        with map_col:
+            render_interactive_map()
+            
+        with form_col:
+            hierarchy_data = render_hierarchy_panel()
+            
+        # --- Live Weather Intelligence Panel (Phase 6Z) ---
+        lat_coord = st.session_state.get('map_lat')
+        lon_coord = st.session_state.get('map_lng')
+        if lat_coord and lon_coord:
+            st.markdown("<br>", unsafe_allow_html=True)
+            st.markdown(f"<div style='background: #f8faf8; border: 1px solid rgba(85, 107, 47, 0.15); border-radius: 12px; padding: 1rem;'>📍 <strong>Selected Coordinates:</strong> {lat_coord:.4f}°N, {lon_coord:.4f}°E</div>", unsafe_allow_html=True)
+            
+            w_col1, w_col2 = st.columns([1.5, 2])
+            with w_col1:
+                st.markdown("<br>", unsafe_allow_html=True)
+                fetch_weather = st.button("🌍 Fetch Environmental Conditions")
+                
+            if fetch_weather:
+                with st.spinner("Connecting to Open-Meteo real-time sensors..."):
+                    from weather.weather_context_engine import get_live_weather_context
+                    user_inputs = {
+                        "temperature": temp_val,
+                        "humidity": hum_val,
+                        "rainfall": rain_val,
+                        "irrigation_type": hierarchy_data.get("irrigation_type", "rain-fed")
+                    }
+                    weather_report = get_live_weather_context(lat_coord, lon_coord, user_inputs)
+                    st.session_state['weather_context'] = weather_report
+                    st.success("✅ Real-time environmental context fetched and cached successfully!")
+                    
+            if 'weather_context' in st.session_state:
+                from frontend.components.weather_cards import render_weather_dashboard
+                render_weather_dashboard(st.session_state['weather_context'])
             
         st.markdown("<br>", unsafe_allow_html=True)
         generate = st.button("Discover Strategy ➔")
         st.markdown("</div>", unsafe_allow_html=True)
 
     if generate:
-        with st.spinner("Analyzing soil profile..."):
+        with st.spinner("Analyzing spatial hierarchy & soil profile..."):
             payload = {
                 "N": n_val, "P": p_val, "K": k_val,
                 "temperature": temp_val, "humidity": hum_val,
                 "ph": ph_val, "rainfall": rain_val,
-                "region": region if region != "Unknown" else None
+                "latitude": lat_coord,
+                "longitude": lon_coord,
+                "weather_context": st.session_state.get('weather_context'),
+                **hierarchy_data
             }
             
             result = predict_soil(payload)
@@ -255,6 +310,16 @@ def page_predictive_analysis():
                         render_hybrid_intelligence_score_gauge(dec_support.get("hybrid_intelligence_score", {}))
                         
                     with col_actions:
+                        # Region Intelligence Panel
+                        reg_intel = dec_support.get("region_intelligence", {})
+                        if reg_intel:
+                            st.markdown(f"#### 🌍 {reg_intel.get('title', 'Region Intelligence')}")
+                            if reg_intel.get("environmental_context"):
+                                st.info("Context: " + " ".join(reg_intel["environmental_context"]))
+                            if reg_intel.get("environmental_risks"):
+                                st.warning("Risks: " + " ".join(reg_intel["environmental_risks"]))
+                            st.markdown("---")
+                            
                         # Agronomic narrative & Prioritized recommendation cards
                         render_agronomic_narrative(dec_support.get("narrative", ""))
                         render_prioritized_recommendations(dec_support.get("prioritized_actions", {}))
@@ -262,8 +327,24 @@ def page_predictive_analysis():
                     st.markdown("<br>", unsafe_allow_html=True)
                     
                     # 2. Alternative Crop Suitability Index
-                    render_comparative_crops(dec_support.get("top_k_crops", []))
+                    render_comparative_crops(dec_support.get("top_k_crops", []), dec_support.get("crops_to_avoid", []))
                     st.markdown("<br>", unsafe_allow_html=True)
+                    
+                    # 3. Live Weather Environmental Context Integration (Phase 6Z)
+                    w_intel = result.get("weather_intelligence", {})
+                    if w_intel and w_intel.get("status") in ["success", "fallback"]:
+                        st.markdown("### 🌍 Real-Time Environmental Sensors Report")
+                        from frontend.components.weather_cards import render_weather_dashboard
+                        render_weather_dashboard(w_intel)
+                        st.markdown("<br>", unsafe_allow_html=True)
+                        
+                    # 4. Connected Agronomic Knowledge Graph & Adaptive Intelligence (Phase 7)
+                    a_intel = result.get("adaptive_intelligence", {})
+                    if a_intel and "intelligence_score" in a_intel:
+                        st.markdown("### 🕸️ Connected Agricultural Adaptive Intelligence")
+                        from frontend.components.adaptive_intelligence_cards import render_adaptive_dashboard
+                        render_adaptive_dashboard(a_intel)
+                        st.markdown("<br>", unsafe_allow_html=True)
 
                 # --- Explainability Panel ---
                 st.markdown("### 🔍 Model Explainability & Local SHAP Analysis")
@@ -275,7 +356,7 @@ def page_predictive_analysis():
 
 def render_sidebar():
     with st.sidebar:
-        st.markdown("<h2 style='text-align: center; color: #4d7c0f;'>ECOLAND</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center; color: #4d7c0f;'>AGROSPHERE</h2>", unsafe_allow_html=True)
         st.markdown("---")
         page = st.radio("Navigation", ["Precision Services", "Operational Observability"])
         st.markdown("---")

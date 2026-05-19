@@ -1,0 +1,25 @@
+SPATIAL INTELLIGENCE REPORT
+===========================
+{
+  "top_k_crops": [
+    {
+      "crop": "Rice",
+      "suitability_score": 75,
+      "advantages": [
+        "coastal/delta conditions and high water availability align strongly with paddy cultivation."
+      ],
+      "risks": []
+    }
+  ],
+  "narrative": "Standard base analysis. High humidity + strong monsoon compatibility. Stable water supply through canals. May have salinity risks if overused.",
+  "region_intelligence": {
+    "title": "Region Intelligence: Tamil Nadu (Thanjavur)",
+    "environmental_context": [
+      "High humidity + strong monsoon compatibility."
+    ],
+    "environmental_risks": [
+      "Flood sensitivity and potential salinity concerns."
+    ],
+    "irrigation_assessment": "Stable water supply through canals. May have salinity risks if overused."
+  }
+}

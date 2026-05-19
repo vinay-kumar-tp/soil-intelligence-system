@@ -1,0 +1,17 @@
+REVERSE RESOLUTION ENGINE REPORT
+================================
+
+Engine: Local Spatial Resolution
+Method: Ray-casting Point-in-Polygon + Nearest-Neighbor Distance Fallback
+Dependencies: Pure Python (No GeoPandas, No external APIs)
+
+Test Coordinates: Lat 10.965, Lon 79.385
+Resolved Properties: {
+  "state": "Tamil Nadu",
+  "district": "Thanjavur",
+  "taluk": "Kumbakonam",
+  "hobli": "Swamimalai",
+  "village": "Thiruvalanjuli"
+}
+
+Status: Passed (Resolved locally without online API)

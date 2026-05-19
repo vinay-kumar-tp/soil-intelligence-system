@@ -18,3 +18,5 @@ scipy==1.11.1
 mlflow==2.6.0
 pytest==7.4.0
 httpx==0.24.1
+folium==0.14.0
+streamlit-folium==0.13.0
