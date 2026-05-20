@@ -232,7 +232,6 @@ def render_hierarchy_panel():
         agro_climatic_zone = st.selectbox("Agro-Climatic Zone", ["Coastal", "Delta", "Semi-Arid", "Western Ghats", "Dry Plains"])
         irrigation_type = st.selectbox("Irrigation Type", ["Rain-fed", "Canal irrigation", "Borewell", "Drip irrigation"])
     with ecol2:
-        soil_texture = st.selectbox("Soil Texture", ["Clay", "Sandy", "Loamy", "Red Soil", "Black Soil"])
         seasonal_context = st.selectbox("Seasonal Context", ["Kharif", "Rabi", "Summer"])
         
     # Return payload dict
@@ -245,6 +244,5 @@ def render_hierarchy_panel():
         "village": sel_village if sel_village != "Data Missing" else None,
         "agro_climatic_zone": agro_climatic_zone,
         "irrigation_type": irrigation_type,
-        "soil_texture": soil_texture,
         "seasonal_context": seasonal_context
     }

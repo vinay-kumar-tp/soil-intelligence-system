@@ -48,3 +48,14 @@ def predict_soil(payload: Dict[str, Any]) -> Dict[str, Any]:
     except requests.exceptions.RequestException as e:
         logger.error(f"Prediction request failed: {e}")
         return {"status": "error", "message": str(e)}
+
+def predict_from_image(image_bytes: bytes) -> Dict[str, Any]:
+    """Send a soil image to the CNN inference endpoint."""
+    try:
+        files = {"file": ("soil_image.jpg", image_bytes, "image/jpeg")}
+        response = session.post(f"{API_BASE_URL}/predict-from-image", files=files, timeout=TIMEOUT_SECONDS * 2)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Image prediction request failed: {e}")
+        return {"status": "error", "message": str(e)}

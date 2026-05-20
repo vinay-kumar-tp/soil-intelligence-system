@@ -16,6 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from api.middleware.logging import RequestTracingMiddleware
 from api.routes.inference import router as inference_router
+from api.routes.image_inference import router as image_router
 from inference.loaders import registry_cache
 import logging
 
@@ -47,6 +48,7 @@ def create_app() -> FastAPI:
 
     # Routes
     app.include_router(inference_router, prefix="/api/v1")
+    app.include_router(image_router, prefix="/api/v1")
 
     @app.on_event("startup")
     async def startup_event():

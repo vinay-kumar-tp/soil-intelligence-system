@@ -18,6 +18,7 @@ from components.decision_cards import (
     render_comparative_crops
 )
 from components.map_view import render_interactive_map, render_hierarchy_panel
+from services.api_client import predict_from_image
 
 st.set_page_config(
     page_title="AgroSphere - Precision Agronomic Platform",
@@ -209,6 +210,14 @@ def page_predictive_analysis():
         
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown("<div class='form-panel'>", unsafe_allow_html=True)
+        st.markdown("<h3 style='color: #2b3a18; margin-bottom: 20px;'>📸 Deep Learning Soil Analysis</h3>", unsafe_allow_html=True)
+        uploaded_file = st.file_uploader("Upload an image of your soil to automatically detect soil texture and improve crop recommendations", type=["jpg", "jpeg", "png"])
+        if uploaded_file:
+            st.image(uploaded_file, caption="Uploaded Soil Sample", use_column_width=False, width=300)
+        st.markdown("</div>", unsafe_allow_html=True)
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("<div class='form-panel'>", unsafe_allow_html=True)
         st.markdown("<h3 style='color: #2b3a18; margin-bottom: 20px;'>Hierarchical Geo-Spatial Agronomic Intelligence</h3>", unsafe_allow_html=True)
         
         map_col, form_col = st.columns([1, 1.2])
@@ -254,6 +263,19 @@ def page_predictive_analysis():
 
     if generate:
         with st.spinner("Analyzing spatial hierarchy & soil profile..."):
+            
+            # --- 1. Process Image if Uploaded ---
+            image_intelligence = None
+            detected_soil_type = None
+            if uploaded_file is not None:
+                with st.spinner("Analyzing image through CNN layers..."):
+                    image_bytes = uploaded_file.getvalue()
+                    img_result = predict_from_image(image_bytes)
+                    if img_result.get("status") == "success":
+                        image_intelligence = img_result
+                        detected_soil_type = img_result.get("soil_type", "Unknown")
+            
+            # --- 2. Build Unified Payload ---
             payload = {
                 "N": n_val, "P": p_val, "K": k_val,
                 "temperature": temp_val, "humidity": hum_val,
@@ -264,13 +286,28 @@ def page_predictive_analysis():
                 **hierarchy_data
             }
             
+            # Inject deep learning soil texture if found
+            if detected_soil_type:
+                payload["soil_texture"] = detected_soil_type
+
             result = predict_soil(payload)
             time.sleep(0.5) 
             
             if result.get("status") == "success":
                 preds = result["predictions"]
                 
-                st.markdown("<br><br><h2 style='color:#2b3a18; text-align:center; margin-bottom:30px;'>AI Strategy Results</h2>", unsafe_allow_html=True)
+                # --- 3. Display Image Intelligence First ---
+                if image_intelligence:
+                    st.markdown("<br><h2 style='color:#2b3a18; text-align:center; margin-bottom:10px;'>📸 Deep Learning Analysis</h2>", unsafe_allow_html=True)
+                    st.success("✅ Neural Network Analysis Complete")
+                    soil_type = image_intelligence.get("soil_type", "Unknown")
+                    confidence = image_intelligence.get("confidence", 0) * 100
+                    st.markdown(f"#### Predicted Soil Type: **{soil_type}**")
+                    st.progress(confidence / 100.0)
+                    st.caption(f"Confidence Score: **{confidence:.1f}%**")
+                    st.markdown("---")
+                    
+                st.markdown("<br><h2 style='color:#2b3a18; text-align:center; margin-bottom:30px;'>AI Strategy Results</h2>", unsafe_allow_html=True)
                 
                 # --- Square Blocks Grid (Reference Image 2) ---
                 crop = preds["crop"].get("prediction", "N/A")
